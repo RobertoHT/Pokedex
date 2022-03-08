@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
+
+    <TextView
+        android:id="@+id/statTitle"
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        tools:text="HP" />
+
+    <com.skydoves.progressview.ProgressView
+        android:id="@+id/statProgress"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        app:progressView_animation="decelerate"
+        app:progressView_colorBackground="@color/progress_background"
+        app:progressView_labelColorInner="@color/black"
+        app:progressView_labelColorOuter="@color/black"
+        app:progressView_labelSize="14sp"
+        app:progressView_radius="15dp"
+        app:progressView_max="250"
+        android:layout_marginStart="10dp"/>
+
+</LinearLayout>
