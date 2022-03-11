@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.ui
+package com.architect.coders.pokedex.ui.detail
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

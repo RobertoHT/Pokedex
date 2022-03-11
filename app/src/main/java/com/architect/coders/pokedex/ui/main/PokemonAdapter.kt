@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.ui
+package com.architect.coders.pokedex.ui.main
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -17,8 +17,10 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
-class PokemonAdapter(private val pokemonList: List<PokemonItem>, private val pokemonClickListener: (PokemonItem, colorSwatch: Int) -> Unit)
+class PokemonAdapter(list: List<PokemonItem>, private val pokemonClickListener: (PokemonItem, colorSwatch: Int) -> Unit)
     : RecyclerView.Adapter<PokemonAdapter.ViewHolder>() {
+
+    private var pokemonList: MutableList<PokemonItem> = list.toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = PokemonItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -30,6 +32,11 @@ class PokemonAdapter(private val pokemonList: List<PokemonItem>, private val pok
     }
 
     override fun getItemCount(): Int = pokemonList.size
+
+    fun updatePokemonList(list: List<PokemonItem>) {
+        pokemonList.addAll(list)
+        notifyDataSetChanged()
+    }
 
     class ViewHolder(private val binding: PokemonItemBinding, private val pokemonClickListener: (PokemonItem, colorSwatch: Int) -> Unit)
         : RecyclerView.ViewHolder(binding.root) {

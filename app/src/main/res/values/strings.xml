@@ -2,5 +2,9 @@
     <string name="app_name">Pokedex</string>
     <string name="detail_weight">%d kg</string>
     <string name="detail_height">%d m</string>
-    <string name="detail_base_stats">Base Stats</string>
+    <string name="detail_base_stats">Base stats:</string>
+    <string name="btn_my_collection">My collection</string>
+    <string name="gallery_amiibo">amiibo</string>
+    <string name="gallery_plush">Plus</string>
+    <string name="gallery_other">Other</string>
 </resources>

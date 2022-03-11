@@ -27,7 +27,7 @@
         app:progressView_labelColorOuter="@color/black"
         app:progressView_labelSize="14sp"
         app:progressView_radius="15dp"
-        app:progressView_max="250"
+        app:progressView_max="280"
         android:layout_marginStart="10dp"/>
 
 </LinearLayout>

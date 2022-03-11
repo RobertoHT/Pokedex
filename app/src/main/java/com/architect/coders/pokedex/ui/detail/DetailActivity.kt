@@ -1,11 +1,13 @@
-package com.architect.coders.pokedex.ui
+package com.architect.coders.pokedex.ui.detail
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.databinding.ActivityDetailBinding
 import com.architect.coders.pokedex.network.PokeClient
+import com.architect.coders.pokedex.ui.gallery.GalleryActivity
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.launch
 
@@ -22,9 +24,11 @@ class DetailActivity : AppCompatActivity() {
         val binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val id = intent.getIntExtra(EXTRA_ID, 0)
+        val pokemonID = intent.getIntExtra(EXTRA_ID, 0)
         val imageUrl = intent.getStringExtra(EXTRA_IMAGE_URL)
         val colorSwatch = intent.getIntExtra(EXTRA_IMAGE_COLOR, 0)
+
+        window.statusBarColor = colorSwatch
 
         if (imageUrl != null) {
             Glide.with(binding.root.context)
@@ -34,7 +38,7 @@ class DetailActivity : AppCompatActivity() {
             binding.containerDetail.setBackgroundColor(colorSwatch)
 
             lifecycleScope.launch {
-                val result = PokeClient.service.getPokemonDetail(id)
+                val result = PokeClient.service.getPokemonDetail(pokemonID)
                 binding.nameDetail.text = result.name
                 binding.weightDetail.text = getString(R.string.detail_weight, result.weight)
                 binding.heightDetail.text = getString(R.string.detail_height, result.height)
@@ -45,6 +49,12 @@ class DetailActivity : AppCompatActivity() {
                 val adapterStat = StatAdapter(result.stats)
                 binding.statRecyclerView.adapter = adapterStat
             }
+        }
+
+        binding.btnMyCollection.setOnClickListener {
+            val intent = Intent(this, GalleryActivity::class.java)
+            intent.putExtra(EXTRA_ID, pokemonID)
+            startActivity(intent)
         }
     }
 }
