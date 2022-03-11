@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex
+package com.architect.coders.pokedex.util
 
 import com.architect.coders.pokedex.model.PokemonItem
 

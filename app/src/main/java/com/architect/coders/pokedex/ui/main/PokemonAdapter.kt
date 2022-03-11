@@ -9,7 +9,7 @@ import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.databinding.PokemonItemBinding
-import com.architect.coders.pokedex.imageUrl
+import com.architect.coders.pokedex.util.imageUrl
 import com.architect.coders.pokedex.model.PokemonItem
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource

@@ -2,13 +2,14 @@ package com.architect.coders.pokedex.ui.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.ActivityMainBinding
-import com.architect.coders.pokedex.id
-import com.architect.coders.pokedex.imageUrl
+import com.architect.coders.pokedex.util.id
+import com.architect.coders.pokedex.util.imageUrl
 import com.architect.coders.pokedex.model.PokemonItem
 import com.architect.coders.pokedex.network.PokeClient
 import com.architect.coders.pokedex.ui.detail.DetailActivity
@@ -27,9 +28,11 @@ class MainActivity : AppCompatActivity() {
 
         loadMorePokemon(binding.recycler)
         lifecycleScope.launch {
+            binding.progress.visibility = View.VISIBLE
             val result = PokeClient.service.getPokemonList(offset)
             adapter = PokemonAdapter(result.pokemonItems) { pokemon, color -> navigateTo(pokemon, color) }
             binding.recycler.adapter = adapter
+            binding.progress.visibility = View.GONE
         }
     }
 

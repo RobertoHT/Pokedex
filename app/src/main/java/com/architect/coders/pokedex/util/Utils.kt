@@ -1,4 +1,6 @@
-package com.architect.coders.pokedex
+package com.architect.coders.pokedex.util
+
+import com.architect.coders.pokedex.R
 
 fun getTypePokemonColor(typeName: String): Int {
     return when(typeName) {

@@ -3,6 +3,7 @@ package com.architect.coders.pokedex.ui.detail
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.lifecycleScope
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.databinding.ActivityDetailBinding
@@ -19,9 +20,11 @@ class DetailActivity : AppCompatActivity() {
         const val EXTRA_IMAGE_COLOR = "pokemon:colorSwatch"
     }
 
+    private lateinit var binding: ActivityDetailBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityDetailBinding.inflate(layoutInflater)
+        binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val pokemonID = intent.getIntExtra(EXTRA_ID, 0)
@@ -31,6 +34,8 @@ class DetailActivity : AppCompatActivity() {
         window.statusBarColor = colorSwatch
 
         if (imageUrl != null) {
+            visibleViews(false)
+
             Glide.with(binding.root.context)
                 .load(imageUrl)
                 .into(binding.imageDetail)
@@ -48,6 +53,8 @@ class DetailActivity : AppCompatActivity() {
 
                 val adapterStat = StatAdapter(result.stats)
                 binding.statRecyclerView.adapter = adapterStat
+
+                visibleViews(true)
             }
         }
 
@@ -56,5 +63,11 @@ class DetailActivity : AppCompatActivity() {
             intent.putExtra(EXTRA_ID, pokemonID)
             startActivity(intent)
         }
+    }
+
+    fun visibleViews(isVisible: Boolean) {
+        binding.progress.visibility = if (!isVisible) View.VISIBLE else View.GONE
+        binding.cardView.visibility = if (isVisible) View.VISIBLE else View.GONE
+        binding.imageDetail.visibility = if (isVisible) View.VISIBLE else View.GONE
     }
 }

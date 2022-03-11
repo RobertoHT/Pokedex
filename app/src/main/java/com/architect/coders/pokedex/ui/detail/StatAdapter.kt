@@ -4,8 +4,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.StatItemBinding
-import com.architect.coders.pokedex.getStatPokemonColor
-import com.architect.coders.pokedex.getStatPokemonText
+import com.architect.coders.pokedex.util.getStatPokemonColor
+import com.architect.coders.pokedex.util.getStatPokemonText
 import com.architect.coders.pokedex.model.Stat
 
 class StatAdapter(private val stats: List<Stat>) : RecyclerView.Adapter<StatAdapter.ViewHolder>() {

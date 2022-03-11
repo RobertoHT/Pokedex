@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.TypeItemBinding
-import com.architect.coders.pokedex.getTypePokemonColor
+import com.architect.coders.pokedex.util.getTypePokemonColor
 import com.architect.coders.pokedex.model.Type
 
 class TypeAdapter(private val types: List<Type>) : RecyclerView.Adapter<TypeAdapter.ViewHolder>() {
@@ -25,7 +25,8 @@ class TypeAdapter(private val types: List<Type>) : RecyclerView.Adapter<TypeAdap
             val typeName = type.type.name
             binding.typePoke.text = typeName
             binding.typeCardView.setCardBackgroundColor(binding.root.context.getColor(
-                getTypePokemonColor(typeName)))
+                getTypePokemonColor(typeName)
+            ))
         }
     }
 }
