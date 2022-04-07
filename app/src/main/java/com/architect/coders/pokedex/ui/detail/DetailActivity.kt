@@ -21,6 +21,7 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private lateinit var binding: ActivityDetailBinding
+    private var favorite: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +63,16 @@ class DetailActivity : AppCompatActivity() {
             val intent = Intent(this, GalleryActivity::class.java)
             intent.putExtra(EXTRA_ID, pokemonID)
             startActivity(intent)
+        }
+
+        binding.btnFavorite.setOnClickListener {
+            val idDrawable = if (favorite) {
+                R.drawable.ic_favorite
+            } else {
+                R.drawable.ic_favorite_bold
+            }
+            binding.btnFavorite.setImageResource(idDrawable)
+            favorite = !favorite
         }
     }
 
