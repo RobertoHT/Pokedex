@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.GalleryItemBinding
 import com.bumptech.glide.Glide
 
-class GalleryAdapter(private val imageList: List<String>) : RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
+class GalleryAdapter(private val imageList: List<String>, val collectionClickListener: () -> Unit) :
+    RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = GalleryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -15,6 +16,7 @@ class GalleryAdapter(private val imageList: List<String>) : RecyclerView.Adapter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(imageList[position])
+        holder.itemView.setOnClickListener { collectionClickListener() }
     }
 
     override fun getItemCount(): Int = imageList.size
