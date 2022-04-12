@@ -3,7 +3,7 @@ package com.architect.coders.pokedex.ui.collection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.architect.coders.pokedex.databinding.ActivityCollectionBinding
-import com.bumptech.glide.Glide
+import com.architect.coders.pokedex.util.loadWithPathWithoutPlaceHolder
 
 class CollectionActivity : AppCompatActivity() {
 
@@ -17,8 +17,6 @@ class CollectionActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val imagePath = intent.getStringExtra(EXTRA_IMAGE)
-        Glide.with(binding.root.context)
-            .load(imagePath)
-            .into(binding.imvCollection)
+        imagePath?.let { binding.imvCollection.loadWithPathWithoutPlaceHolder(it) }
     }
 }

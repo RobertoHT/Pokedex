@@ -19,7 +19,8 @@ class MainActivity : AppCompatActivity() {
 
     private var loading = true
     private var offset = 0
-    private lateinit var adapter : PokemonAdapter
+    private val adapter = PokemonAdapter { pokemon, color -> navigateTo(pokemon, color) }
+    private val pokemonList : MutableList<PokemonItem> = arrayListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,8 +31,9 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             binding.progress.visibility = View.VISIBLE
             val result = PokeClient.service.getPokemonList(offset)
-            adapter = PokemonAdapter(result.pokemonItems) { pokemon, color -> navigateTo(pokemon, color) }
+            pokemonList.addAll(result.pokemonItems)
             binding.recycler.adapter = adapter
+            adapter.submitList(pokemonList.toList())
             binding.progress.visibility = View.GONE
         }
     }
@@ -45,7 +47,8 @@ class MainActivity : AppCompatActivity() {
                     offset += 20
                     lifecycleScope.launch {
                         val result = PokeClient.service.getPokemonList(offset)
-                        adapter.updatePokemonList(result.pokemonItems)
+                        pokemonList.addAll(result.pokemonItems)
+                        adapter.submitList(pokemonList.toList())
                         loading = true
                     }
                 }

@@ -1,16 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="80dp"
-    android:layout_height="80dp"
-    android:layout_margin="5dp"
-    app:cardCornerRadius="10dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="10dp">
 
-    <ImageView
-        android:id="@+id/galleryImage"
+    <TextView
+        android:id="@+id/galleryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        tools:text="@string/gallery_amiibo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/galleryRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:spanCount="4"
+        tools:listitem="@layout/photo_item"
+        android:overScrollMode="never"/>
 
-</androidx.cardview.widget.CardView>
+</androidx.appcompat.widget.LinearLayoutCompat>

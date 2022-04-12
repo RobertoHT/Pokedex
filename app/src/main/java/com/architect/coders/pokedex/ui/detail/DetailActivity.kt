@@ -9,7 +9,7 @@ import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.databinding.ActivityDetailBinding
 import com.architect.coders.pokedex.network.PokeClient
 import com.architect.coders.pokedex.ui.gallery.GalleryActivity
-import com.bumptech.glide.Glide
+import com.architect.coders.pokedex.util.loadWithPath
 import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
@@ -37,9 +37,7 @@ class DetailActivity : AppCompatActivity() {
         if (imageUrl != null) {
             visibleViews(false)
 
-            Glide.with(binding.root.context)
-                .load(imageUrl)
-                .into(binding.imageDetail)
+            binding.imageDetail.loadWithPath(imageUrl)
 
             binding.containerDetail.setBackgroundColor(colorSwatch)
 
@@ -76,9 +74,9 @@ class DetailActivity : AppCompatActivity() {
         }
     }
 
-    fun visibleViews(isVisible: Boolean) {
+    private fun visibleViews(isVisible: Boolean) {
         binding.progress.visibility = if (!isVisible) View.VISIBLE else View.GONE
-        binding.cardView.visibility = if (isVisible) View.VISIBLE else View.GONE
-        binding.imageDetail.visibility = if (isVisible) View.VISIBLE else View.GONE
+        binding.cardView.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+        binding.imageDetail.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
 }
