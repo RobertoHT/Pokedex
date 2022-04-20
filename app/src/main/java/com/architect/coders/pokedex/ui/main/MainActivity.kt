@@ -9,7 +9,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.ActivityMainBinding
 import com.architect.coders.pokedex.common.id
-import com.architect.coders.pokedex.common.imageUrl
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.model.PokemonItem
 import com.architect.coders.pokedex.ui.detail.DetailActivity
@@ -63,7 +62,6 @@ class MainActivity : AppCompatActivity() {
     private fun navigateTo(pokemon: PokemonItem, @ColorInt color: Int) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra(DetailActivity.EXTRA_ID, pokemon.id())
-        intent.putExtra(DetailActivity.EXTRA_IMAGE_URL, pokemon.imageUrl())
         intent.putExtra(DetailActivity.EXTRA_IMAGE_COLOR, color)
         startActivity(intent)
     }

@@ -6,4 +6,7 @@ class PokemonRepository() {
 
     suspend fun getPokemonList(offset: Int) =
         PokeClient.service.getPokemonList(offset)
+
+    suspend fun getPokemonDetail(pokemonID: Int) =
+        PokeClient.service.getPokemonDetail(pokemonID)
 }

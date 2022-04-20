@@ -24,7 +24,7 @@ class TypeAdapter(private val types: List<Type>) : RecyclerView.Adapter<TypeAdap
         fun bind(type: Type) {
             val typeName = type.type.name
             binding.typePoke.text = typeName
-            binding.typeCardView.setCardBackgroundColor(binding.root.context.getColor(
+            binding.typeCardView.setCardBackgroundColor(itemView.context.getColor(
                 getTypePokemonColor(typeName)
             ))
         }
