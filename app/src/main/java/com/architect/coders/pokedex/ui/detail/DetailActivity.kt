@@ -9,7 +9,7 @@ import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.databinding.ActivityDetailBinding
 import com.architect.coders.pokedex.network.PokeClient
 import com.architect.coders.pokedex.ui.gallery.GalleryActivity
-import com.architect.coders.pokedex.util.loadWithPath
+import com.architect.coders.pokedex.common.loadWithPath
 import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {

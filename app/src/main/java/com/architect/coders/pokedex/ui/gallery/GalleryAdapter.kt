@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.GalleryItemBinding
 import com.architect.coders.pokedex.model.GalleryItem
-import com.architect.coders.pokedex.util.PokeCollec
-import com.architect.coders.pokedex.util.setCollectionTitle
+import com.architect.coders.pokedex.common.PokeCollec
+import com.architect.coders.pokedex.common.setCollectionTitle
 
 class GalleryAdapter(private val galleryList: List<GalleryItem>, private val collectionClickListener: (String) -> Unit) :
     RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {

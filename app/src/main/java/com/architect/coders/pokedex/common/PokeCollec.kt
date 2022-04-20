@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.util
+package com.architect.coders.pokedex.common
 
 enum class PokeCollec(val id: Int) {
     AMIIBO(1),

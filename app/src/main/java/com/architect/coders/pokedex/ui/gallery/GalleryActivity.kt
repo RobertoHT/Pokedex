@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.os.Environment
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
-import com.architect.coders.pokedex.util.PokeCollec
+import com.architect.coders.pokedex.common.PokeCollec
 import com.architect.coders.pokedex.databinding.ActivityGalleryBinding
 import com.architect.coders.pokedex.model.GalleryItem
 import com.architect.coders.pokedex.ui.collection.CollectionActivity

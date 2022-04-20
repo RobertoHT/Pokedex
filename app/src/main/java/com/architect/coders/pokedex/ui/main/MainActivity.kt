@@ -8,37 +8,38 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.ActivityMainBinding
-import com.architect.coders.pokedex.util.id
-import com.architect.coders.pokedex.util.imageUrl
+import com.architect.coders.pokedex.common.id
+import com.architect.coders.pokedex.common.imageUrl
+import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.model.PokemonItem
-import com.architect.coders.pokedex.network.PokeClient
 import com.architect.coders.pokedex.ui.detail.DetailActivity
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private var loading = true
-    private var offset = 0
     private val adapter = PokemonAdapter { pokemon, color -> navigateTo(pokemon, color) }
     private val pokemonList : MutableList<PokemonItem> = arrayListOf()
+    private val pokemonRepository by lazy { PokemonRepository() }
+
+    private var loading = true
+    private var offset = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadMorePokemon(binding.recycler)
+        binding.recycler.adapter = adapter
+        setupScrollListener(binding.recycler)
+
         lifecycleScope.launch {
             binding.progress.visibility = View.VISIBLE
-            val result = PokeClient.service.getPokemonList(offset)
-            pokemonList.addAll(result.pokemonItems)
-            binding.recycler.adapter = adapter
-            adapter.submitList(pokemonList.toList())
+            getPokemonList()
             binding.progress.visibility = View.GONE
         }
     }
 
-    private fun loadMorePokemon(reycler: RecyclerView) {
+    private fun setupScrollListener(reycler: RecyclerView) {
         reycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
@@ -46,14 +47,17 @@ class MainActivity : AppCompatActivity() {
                     loading = false
                     offset += 20
                     lifecycleScope.launch {
-                        val result = PokeClient.service.getPokemonList(offset)
-                        pokemonList.addAll(result.pokemonItems)
-                        adapter.submitList(pokemonList.toList())
+                        getPokemonList()
                         loading = true
                     }
                 }
             }
         })
+    }
+
+    private suspend fun getPokemonList() {
+        pokemonList.addAll(pokemonRepository.getPokemonList(offset).pokemonItems)
+        adapter.submitList(pokemonList.toList())
     }
 
     private fun navigateTo(pokemon: PokemonItem, @ColorInt color: Int) {

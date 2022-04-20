@@ -1,8 +1,10 @@
-package com.architect.coders.pokedex.util
+package com.architect.coders.pokedex.common
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.toBitmap
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.DiffUtil
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.model.PokemonItem
@@ -45,7 +47,7 @@ fun ImageView.loadWithPathWithoutPlaceHolder(path: String) {
         .into(this)
 }
 
-fun ImageView.loadWithPathAndListener(path: String,  listener: (drawable: Drawable) -> Unit) {
+fun ImageView.loadWithPathAndGetColor(path: String,  listener: (color: Int) -> Unit) {
     Glide.with(this)
         .load(path)
         .placeholder(R.drawable.ic_loading)
@@ -57,7 +59,8 @@ fun ImageView.loadWithPathAndListener(path: String,  listener: (drawable: Drawab
                 target: Target<Drawable>?,
                 isFirstResource: Boolean
             ): Boolean {
-                TODO("Not yet implemented")
+                listener(R.color.white)
+                return false
             }
 
             override fun onResourceReady(
@@ -67,7 +70,13 @@ fun ImageView.loadWithPathAndListener(path: String,  listener: (drawable: Drawab
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                resource?.let { listener(resource) }
+                resource?.let { it ->
+                    val palette = Palette.from(it.toBitmap()).generate()
+                    val swatch = palette.dominantSwatch
+                    swatch?.rgb?.let {
+                        listener(it)
+                    }
+                }
                 return false
             }
 
