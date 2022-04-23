@@ -25,6 +25,7 @@ class GalleryAdapter(private val galleryList: List<GalleryItem>, private val col
     fun addImage(type: PokeCollec, image: String) {
         val index = galleryList.indexOfFirst { it.type == type }
         val item = galleryList[index]
+
         item.photos.add(image)
         notifyItemChanged(index)
     }

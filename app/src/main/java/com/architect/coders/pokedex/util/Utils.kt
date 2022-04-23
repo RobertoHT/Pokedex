@@ -1,6 +1,9 @@
 package com.architect.coders.pokedex.util
 
+import androidx.annotation.IdRes
 import com.architect.coders.pokedex.R
+import com.architect.coders.pokedex.common.PokeCollec
+import com.architect.coders.pokedex.model.GalleryItem
 
 fun getTypePokemonColor(typeName: String): Int {
     return when(typeName) {
@@ -48,3 +51,30 @@ fun getStatPokemonColor(statName: String): Int {
         else -> R.color.white
     }
 }
+
+fun getGalleryItems(): List<GalleryItem> = listOf(
+    GalleryItem(PokeCollec.AMIIBO, getList()),
+    GalleryItem(PokeCollec.PLUSH, getList()),
+    GalleryItem(PokeCollec.OTHER, getList()),
+)
+
+private fun getList(): MutableList<String> = mutableListOf(
+    "https://placekitten.com/200/200?image=1",
+    "https://placekitten.com/200/200?image=2",
+    "https://placekitten.com/200/200?image=3",
+    "https://placekitten.com/200/200?image=4",
+    "https://placekitten.com/200/200?image=5",
+    "https://placekitten.com/200/200?image=6",
+    "https://placekitten.com/200/200?image=7",
+    "https://placekitten.com/200/200?image=8",
+    "https://placekitten.com/200/200?image=9",
+    "https://placekitten.com/200/200?image=10"
+)
+
+fun getCollection(@IdRes fabID: Int) =
+    when(fabID) {
+        R.id.fabAmiibo -> PokeCollec.AMIIBO
+        R.id.fabPlush -> PokeCollec.PLUSH
+        R.id.fabOther -> PokeCollec.OTHER
+        else -> PokeCollec.OTHER
+    }
