@@ -25,11 +25,11 @@ class StatAdapter(private val stats: List<Stat>) : RecyclerView.Adapter<StatAdap
 
         fun bind(stat: Stat) {
             binding.statTitle.text = getStatPokemonText(stat.stat.name)
-            binding.statProgress.highlightView.color = binding.root.context.getColor(
-                getStatPokemonColor(stat.stat.name)
-            )
             binding.statProgress.progress = stat.baseStat.toFloat()
             binding.statProgress.labelText = stat.baseStat.toString()
+            binding.statProgress.highlightView.color = itemView.context.getColor(
+                getStatPokemonColor(stat.stat.name)
+            )
         }
     }
 }

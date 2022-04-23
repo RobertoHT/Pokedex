@@ -1,19 +1,13 @@
 package com.architect.coders.pokedex.ui.main
 
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.graphics.drawable.toBitmap
-import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.R
+import com.architect.coders.pokedex.common.*
 import com.architect.coders.pokedex.databinding.PokemonItemBinding
 import com.architect.coders.pokedex.model.PokemonItem
-import com.architect.coders.pokedex.util.basicDiffUtil
-import com.architect.coders.pokedex.util.id
-import com.architect.coders.pokedex.util.imageUrl
-import com.architect.coders.pokedex.util.loadWithPathAndListener
 
 class PokemonAdapter(private val pokemonClickListener: (PokemonItem, colorSwatch: Int) -> Unit) :
     ListAdapter<PokemonItem, PokemonAdapter.ViewHolder>(basicDiffUtil { old, new -> old.id() == new.id() }) {
@@ -34,23 +28,13 @@ class PokemonAdapter(private val pokemonClickListener: (PokemonItem, colorSwatch
 
         fun bind(pokemon: PokemonItem) {
             binding.nameItem.text = pokemon.name
-            binding.imageItem.loadWithPathAndListener(pokemon.imageUrl()) {
-                setColorSwatch(it.toBitmap())
+            binding.imageItem.loadWithPathAndGetColor(pokemon.imageUrl()) {
+                colorPokemon = it
+                binding.cardview.setCardBackgroundColor(it)
             }
 
             binding.root.setOnClickListener {
                 pokemonClickListener(pokemon, colorPokemon)
-            }
-        }
-
-        private fun createPaletteSync(bitmap: Bitmap): Palette = Palette.from(bitmap).generate()
-
-        private fun setColorSwatch(bitmap: Bitmap) {
-            val swatch = createPaletteSync(bitmap).dominantSwatch
-            val rgb = swatch?.rgb
-            if (rgb != null) {
-                binding.cardview.setCardBackgroundColor(rgb)
-                colorPokemon = rgb
             }
         }
     }

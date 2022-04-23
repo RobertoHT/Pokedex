@@ -1,10 +1,13 @@
-package com.architect.coders.pokedex.util
+package com.architect.coders.pokedex.common
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.graphics.drawable.toBitmap
+import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.DiffUtil
 import com.architect.coders.pokedex.R
+import com.architect.coders.pokedex.model.PokemonDetail
 import com.architect.coders.pokedex.model.PokemonItem
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -12,13 +15,18 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
+private const val URL_SPRITE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
+
 fun PokemonItem.id() : Int {
     val split = url.split("/")
     return split[split.size - 2].toInt()
 }
 
 fun PokemonItem.imageUrl() : String =
-    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id()}.png"
+    String.format(URL_SPRITE, id())
+
+fun PokemonDetail.imageUrl() : String =
+    String.format(URL_SPRITE, id)
 
 fun TextView.setCollectionTitle(type: PokeCollec) {
     val title = when(type) {
@@ -45,7 +53,7 @@ fun ImageView.loadWithPathWithoutPlaceHolder(path: String) {
         .into(this)
 }
 
-fun ImageView.loadWithPathAndListener(path: String,  listener: (drawable: Drawable) -> Unit) {
+fun ImageView.loadWithPathAndGetColor(path: String,  listener: (color: Int) -> Unit) {
     Glide.with(this)
         .load(path)
         .placeholder(R.drawable.ic_loading)
@@ -57,7 +65,8 @@ fun ImageView.loadWithPathAndListener(path: String,  listener: (drawable: Drawab
                 target: Target<Drawable>?,
                 isFirstResource: Boolean
             ): Boolean {
-                TODO("Not yet implemented")
+                listener(R.color.white)
+                return false
             }
 
             override fun onResourceReady(
@@ -67,7 +76,13 @@ fun ImageView.loadWithPathAndListener(path: String,  listener: (drawable: Drawab
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                resource?.let { listener(resource) }
+                resource?.let { it ->
+                    val palette = Palette.from(it.toBitmap()).generate()
+                    val swatch = palette.dominantSwatch
+                    swatch?.rgb?.let {
+                        listener(it)
+                    }
+                }
                 return false
             }
 

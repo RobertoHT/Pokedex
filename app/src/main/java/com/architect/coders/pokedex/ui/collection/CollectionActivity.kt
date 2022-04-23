@@ -3,7 +3,7 @@ package com.architect.coders.pokedex.ui.collection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.architect.coders.pokedex.databinding.ActivityCollectionBinding
-import com.architect.coders.pokedex.util.loadWithPathWithoutPlaceHolder
+import com.architect.coders.pokedex.common.loadWithPathWithoutPlaceHolder
 
 class CollectionActivity : AppCompatActivity() {
 
