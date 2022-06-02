@@ -1,6 +1,7 @@
 package com.architect.coders.pokedex.common
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
@@ -16,6 +17,12 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 
 private const val URL_SPRITE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
+
+var View.visible: Boolean
+    get() = visibility == View.VISIBLE
+    set(value) {
+        visibility = if (value) View.VISIBLE else View.GONE
+    }
 
 fun PokemonItem.id() : Int {
     val split = url.split("/")

@@ -3,19 +3,19 @@ package com.architect.coders.pokedex.ui.gallery
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.annotation.IdRes
-import androidx.lifecycle.lifecycleScope
+import androidx.activity.viewModels
 import com.architect.coders.pokedex.databinding.ActivityGalleryBinding
 import com.architect.coders.pokedex.file.PokemonPhotoFile
 import com.architect.coders.pokedex.ui.collection.CollectionActivity
 import com.architect.coders.pokedex.ui.detail.DetailActivity
-import com.architect.coders.pokedex.util.getCollection
 import com.architect.coders.pokedex.util.getGalleryItems
-import kotlinx.coroutines.launch
 
 class GalleryActivity : AppCompatActivity() {
 
-    private val pokemonPhoto = PokemonPhotoFile(this)
+    private val viewModel: GalleryViewModel by viewModels { GalleryViewModelFactory(
+        intent.getIntExtra(DetailActivity.EXTRA_ID, 0),
+        PokemonPhotoFile(this))
+    }
     private lateinit var binding: ActivityGalleryBinding
     private lateinit var adapter : GalleryAdapter
 
@@ -24,22 +24,19 @@ class GalleryActivity : AppCompatActivity() {
         binding = ActivityGalleryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val pokemonID = intent.getIntExtra(DetailActivity.EXTRA_ID, 0)
+        viewModel.state.observe(this, ::addImageToList)
 
         adapter = GalleryAdapter(getGalleryItems()) { image -> navigateTo(image) }
         binding.amiiboRecycler.adapter = adapter
 
         binding.expandableFab.portraitConfiguration.fabOptions.forEach {
-                fab -> fab.setOnClickListener { dispatchTakePictureIntent(it.id, pokemonID) }
+                fab -> fab.setOnClickListener { viewModel.takePicture(it.id) }
         }
     }
 
-    private fun dispatchTakePictureIntent(@IdRes fabID: Int, pokemonID: Int) {
-        val pokeType = getCollection(fabID)
-        lifecycleScope.launch {
-            val nameFile = "Poke_${pokemonID}_${pokeType.id}_"
-            val pair = pokemonPhoto.takePhoto(nameFile)
-            pair?.second?.let { adapter.addImage(pokeType, it) }
+    private fun addImageToList(state: GalleryViewModel.UIState) {
+        state.photo?.let {
+            adapter.addImage(it.first, it.second)
         }
     }
 

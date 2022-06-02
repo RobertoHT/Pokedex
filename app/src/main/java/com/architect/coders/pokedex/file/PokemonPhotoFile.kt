@@ -11,11 +11,11 @@ class PokemonPhotoFile(private val activity: AppCompatActivity) {
 
     private val dispatchPicture = DispatchPicture(activity)
 
-    suspend fun takePhoto(nameFile: String) : Pair<Uri, String>? {
+    suspend fun takePhoto(nameFile: String) : String? {
         val pairFile = createFile(nameFile)
         val success = dispatchPicture.request(pairFile.first)
         return if (success) {
-            pairFile
+            pairFile.second
         } else {
             deleteImageFile(pairFile.second)
             null
