@@ -5,6 +5,9 @@ import androidx.lifecycle.*
 import com.architect.coders.pokedex.common.PokeCollec
 import com.architect.coders.pokedex.file.PokemonPhotoFile
 import com.architect.coders.pokedex.util.getCollection
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class GalleryViewModel(
@@ -12,11 +15,8 @@ class GalleryViewModel(
     private val pokemonFile : PokemonPhotoFile
 ) : ViewModel() {
 
-    private val _state = MutableLiveData(UIState())
-    val state: LiveData<UIState>
-        get() {
-            return _state
-        }
+    private val _state = MutableStateFlow(UIState())
+    val state: StateFlow<UIState> = _state.asStateFlow()
 
     fun takePicture(@IdRes fabID: Int) {
         viewModelScope.launch {

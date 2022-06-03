@@ -3,8 +3,13 @@ package com.architect.coders.pokedex.ui.collection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.architect.coders.pokedex.databinding.ActivityCollectionBinding
 import com.architect.coders.pokedex.common.loadWithPathWithoutPlaceHolder
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class CollectionActivity : AppCompatActivity() {
 
@@ -21,8 +26,12 @@ class CollectionActivity : AppCompatActivity() {
         val binding = ActivityCollectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.state.observe(this) { photo ->
-            photo.image?.let { binding.imvCollection.loadWithPathWithoutPlaceHolder(it) }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect { photo ->
+                    photo.image?.let { binding.imvCollection.loadWithPathWithoutPlaceHolder(it) }
+                }
+            }
         }
     }
 }

@@ -4,6 +4,9 @@ import androidx.annotation.ColorInt
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.model.PokemonItem
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel() {
@@ -12,13 +15,11 @@ class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel
     private var loading = true
     private var offset = 0
 
-    private val _state = MutableLiveData(UIState())
-    val state: LiveData<UIState>
-        get() {
-        if (_state.value?.pokemonList == null) {
-            refresh()
-        }
-        return _state
+    private val _state = MutableStateFlow(UIState())
+    val state: StateFlow<UIState> = _state.asStateFlow()
+
+    init {
+        refresh()
     }
 
     private fun refresh() {
@@ -29,7 +30,7 @@ class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel
     }
 
     fun onPokemonClicked(pokemon: PokemonItem, @ColorInt color: Int){
-        _state.value = _state.value?.copy(navigateTo = Pair(pokemon, color))
+        _state.value = _state.value.copy(navigateTo = Pair(pokemon, color))
     }
 
     fun scrolled(dy: Int, canScrollVertically: Boolean) {

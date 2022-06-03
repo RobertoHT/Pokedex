@@ -1,21 +1,19 @@
 package com.architect.coders.pokedex.ui.collection
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-class CollectionViewModel(private val image: String) : ViewModel() {
+class CollectionViewModel(image: String) : ViewModel() {
 
-    private val _state = MutableLiveData(UIState())
-    val state : LiveData<UIState>
-        get() {
-            if (_state.value?.image == null) {
-                _state.value = UIState(image)
-            }
+    private val _state = MutableStateFlow(UIState())
+    val state : StateFlow<UIState> = _state.asStateFlow()
 
-            return _state
-        }
+    init {
+        _state.value = UIState(image)
+    }
 
     class UIState(
         val image: String? = null

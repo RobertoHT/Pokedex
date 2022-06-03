@@ -4,11 +4,16 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.architect.coders.pokedex.databinding.ActivityGalleryBinding
 import com.architect.coders.pokedex.file.PokemonPhotoFile
 import com.architect.coders.pokedex.ui.collection.CollectionActivity
 import com.architect.coders.pokedex.ui.detail.DetailActivity
 import com.architect.coders.pokedex.util.getGalleryItems
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class GalleryActivity : AppCompatActivity() {
 
@@ -24,7 +29,11 @@ class GalleryActivity : AppCompatActivity() {
         binding = ActivityGalleryBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.state.observe(this, ::addImageToList)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect(::addImageToList)
+            }
+        }
 
         adapter = GalleryAdapter(getGalleryItems()) { image -> navigateTo(image) }
         binding.amiiboRecycler.adapter = adapter

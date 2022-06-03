@@ -4,6 +4,9 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.common.imageUrl
 import com.architect.coders.pokedex.databinding.ActivityDetailBinding
@@ -12,6 +15,8 @@ import com.architect.coders.pokedex.common.loadWithPath
 import com.architect.coders.pokedex.common.visible
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.model.PokemonDetail
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class DetailActivity : AppCompatActivity() {
 
@@ -32,7 +37,11 @@ class DetailActivity : AppCompatActivity() {
         binding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        viewModel.state.observe(this, ::updateUI)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect(::updateUI)
+            }
+        }
 
         binding.btnFavorite.setOnClickListener {
             viewModel.favoriteClicked()

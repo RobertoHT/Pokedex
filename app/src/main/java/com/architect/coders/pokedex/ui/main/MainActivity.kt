@@ -5,6 +5,9 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.ActivityMainBinding
 import com.architect.coders.pokedex.common.id
@@ -12,6 +15,8 @@ import com.architect.coders.pokedex.common.visible
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.model.PokemonItem
 import com.architect.coders.pokedex.ui.detail.DetailActivity
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,7 +32,11 @@ class MainActivity : AppCompatActivity() {
         binding.recycler.adapter = adapter
         setupScrollListener(binding.recycler)
 
-        viewModel.state.observe(this, ::updateUI)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect(::updateUI)
+            }
+        }
     }
 
     private fun setupScrollListener(reycler: RecyclerView) {

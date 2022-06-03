@@ -3,6 +3,9 @@ package com.architect.coders.pokedex.ui.detail
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.model.PokemonDetail
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
@@ -11,16 +14,14 @@ class DetailViewModel(
     private val colorSwatch: Int
 ) : ViewModel() {
 
-    private val _state = MutableLiveData(UIState())
-    val state: LiveData<UIState>
-        get() {
-            if (_state.value?.pokemon == null) {
-                refresh()
-            }
-            return _state
-        }
+    private val _state = MutableStateFlow(UIState())
+    val state: StateFlow<UIState> = _state.asStateFlow()
 
     private var favorite: Boolean = false
+
+    init {
+        refresh()
+    }
 
     private fun refresh() {
         viewModelScope.launch {
@@ -31,11 +32,11 @@ class DetailViewModel(
 
     fun favoriteClicked() {
         favorite = !favorite
-        _state.value = _state.value?.copy(favorite = favorite)
+        _state.value = _state.value.copy(favorite = favorite)
     }
 
     fun collectionClicked() {
-        _state.value = _state.value?.copy(navigateTo = pokemonID)
+        _state.value = _state.value.copy(navigateTo = pokemonID)
     }
 
     data class UIState(
