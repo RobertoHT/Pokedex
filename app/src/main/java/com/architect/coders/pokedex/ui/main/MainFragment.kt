@@ -1,40 +1,40 @@
 package com.architect.coders.pokedex.ui.main
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
+import android.view.View
 import androidx.annotation.ColorInt
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import com.architect.coders.pokedex.databinding.ActivityMainBinding
+import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.common.id
 import com.architect.coders.pokedex.common.visible
 import com.architect.coders.pokedex.data.PokemonRepository
+import com.architect.coders.pokedex.databinding.FragmentMainBinding
 import com.architect.coders.pokedex.model.PokemonItem
-import com.architect.coders.pokedex.ui.detail.DetailActivity
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity() {
+class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val viewModel: MainViewModel by viewModels { MainViewModelFactory(PokemonRepository()) }
     private val adapter = PokemonAdapter { pokemon, color -> viewModel.onPokemonClicked(pokemon, color) }
-    private lateinit var binding: ActivityMainBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        binding.recycler.adapter = adapter
-        setupScrollListener(binding.recycler)
+        val binding = FragmentMainBinding.bind(view).apply {
+            recycler.adapter = adapter
+            setupScrollListener(recycler)
+        }
 
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect(::updateUI)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.state.collect { binding.updateUI(it) }
             }
         }
     }
@@ -48,16 +48,14 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun updateUI(state: MainViewModel.UIState) {
-        binding.progress.visible = state.loading
+    private fun FragmentMainBinding.updateUI(state: MainViewModel.UIState) {
+        progress.visible = state.loading
         state.pokemonList?.let(adapter::submitList)
         state.navigateTo?.let { navigateTo(it.first, it.second) }
     }
 
     private fun navigateTo(pokemon: PokemonItem, @ColorInt color: Int) {
-        val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra(DetailActivity.EXTRA_ID, pokemon.id())
-        intent.putExtra(DetailActivity.EXTRA_IMAGE_COLOR, color)
-        startActivity(intent)
+        val action = MainFragmentDirections.actionMainToDetail(pokemon.id(), color)
+        findNavController().navigate(action)
     }
 }
