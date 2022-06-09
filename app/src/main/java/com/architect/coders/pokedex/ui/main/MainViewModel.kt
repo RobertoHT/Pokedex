@@ -44,6 +44,10 @@ class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel
         }
     }
 
+    fun onNavigateDone() {
+        _state.value = _state.value.copy(navigateTo = null)
+    }
+
     private suspend fun getPokemonList() {
         pokemonList.addAll(pokemoRepository.getPokemonList(offset).pokemonItems)
         _state.value = UIState(pokemonList = pokemonList.toList())

@@ -57,7 +57,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
 
         state.colorSwatch.let {
-            //window.statusBarColor = it
+            requireActivity().window.statusBarColor = it
             containerDetail.setBackgroundColor(it)
         }
 
@@ -87,5 +87,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
     private fun navigateTo(pokemonID: Int) {
         val action = DetailFragmentDirections.actionDetailToGallery(pokemonID)
         findNavController().navigate(action)
+        viewModel.onNavigateDone()
     }
 }

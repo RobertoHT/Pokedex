@@ -29,6 +29,10 @@ class GalleryViewModel(
         }
     }
 
+    fun onTakePictureDone() {
+        _state.value = UIState(null)
+    }
+
     class UIState(
         val photo : Pair<PokeCollec, String>? = null
     )

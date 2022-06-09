@@ -3,6 +3,7 @@ package com.architect.coders.pokedex.ui.gallery
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -29,6 +30,8 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.teal_700)
+
         FragmentGalleryBinding.bind(view).apply {
             adapter = GalleryAdapter(getGalleryItems()) { image -> navigateTo(image) }
             amiiboRecycler.adapter = adapter
@@ -48,6 +51,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery) {
     private fun addImageToList(state: GalleryViewModel.UIState) {
         state.photo?.let {
             adapter.addImage(it.first, it.second)
+            viewModel.onTakePictureDone()
         }
     }
 

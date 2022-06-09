@@ -3,6 +3,7 @@ package com.architect.coders.pokedex.ui.main
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -26,6 +27,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().window.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.teal_700)
 
         val binding = FragmentMainBinding.bind(view).apply {
             recycler.adapter = adapter
@@ -57,5 +60,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun navigateTo(pokemon: PokemonItem, @ColorInt color: Int) {
         val action = MainFragmentDirections.actionMainToDetail(pokemon.id(), color)
         findNavController().navigate(action)
+        viewModel.onNavigateDone()
     }
 }

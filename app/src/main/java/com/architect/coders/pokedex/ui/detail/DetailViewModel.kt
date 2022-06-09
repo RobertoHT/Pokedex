@@ -39,6 +39,10 @@ class DetailViewModel(
         _state.value = _state.value.copy(navigateTo = pokemonID)
     }
 
+    fun onNavigateDone() {
+        _state.value = _state.value.copy(navigateTo = null)
+    }
+
     data class UIState(
         val pokemon: PokemonDetail? = null,
         val colorSwatch: Int = 0,
