@@ -1,5 +1,6 @@
 package com.architect.coders.pokedex.ui.gallery
 
+import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.common.PokeCollec
@@ -8,7 +9,6 @@ import com.architect.coders.pokedex.util.getCollection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 
 class GalleryViewModel(
     private val pokemonID: Int,
@@ -18,23 +18,35 @@ class GalleryViewModel(
     private val _state = MutableStateFlow(UIState())
     val state: StateFlow<UIState> = _state.asStateFlow()
 
-    fun takePicture(@IdRes fabID: Int) {
-        viewModelScope.launch {
-            val pokeType = getCollection(fabID)
-            val nameFile = "Poke_${pokemonID}_${pokeType.id}_"
-            val photoPath = pokemonFile.takePhoto(nameFile)
-            photoPath?.let {
-                _state.value = UIState(Pair(pokeType, it))
-            }
+    fun onCreatePictureFile(@IdRes fabID: Int) {
+        val pokeType = getCollection(fabID)
+        val nameFile = "Poke_${pokemonID}_${pokeType.id}_"
+        val imageData = pokemonFile.createFile(nameFile)
+        _state.value = _state.value.copy(pokeType = pokeType, uriImage = imageData.first, pathImage = imageData.second)
+    }
+
+    fun onPictureReady(result: Boolean) {
+        if (result) {
+            _state.value = _state.value.copy(photo = Pair(_state.value.pokeType!!, _state.value.pathImage!!))
+        } else {
+            pokemonFile.deleteImageFile(_state.value.pathImage!!)
+            onTakePictureDone()
         }
     }
 
-    fun onTakePictureDone() {
-        _state.value = UIState(null)
+    fun onUriDone() {
+        _state.value = _state.value.copy(uriImage = null)
     }
 
-    class UIState(
-        val photo : Pair<PokeCollec, String>? = null
+    fun onTakePictureDone() {
+        _state.value = UIState()
+    }
+
+    data class UIState(
+        val photo: Pair<PokeCollec, String>? = null,
+        val pokeType: PokeCollec? = null,
+        val uriImage: Uri? = null,
+        val pathImage: String? = null
     )
 }
 

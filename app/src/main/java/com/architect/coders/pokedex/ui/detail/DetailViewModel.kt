@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class DetailViewModel(
     private val pokemonRepository: PokemonRepository,
-    private val pokemonID: Int,
+    val pokemonID: Int,
     private val colorSwatch: Int
 ) : ViewModel() {
 
@@ -35,21 +35,12 @@ class DetailViewModel(
         _state.value = _state.value.copy(favorite = favorite)
     }
 
-    fun collectionClicked() {
-        _state.value = _state.value.copy(navigateTo = pokemonID)
-    }
-
-    fun onNavigateDone() {
-        _state.value = _state.value.copy(navigateTo = null)
-    }
-
     data class UIState(
         val pokemon: PokemonDetail? = null,
         val colorSwatch: Int = 0,
         val loading: Boolean = false,
         val views: Boolean = false,
-        val favorite: Boolean = false,
-        val navigateTo: Int? = null
+        val favorite: Boolean = false
     )
 }
 

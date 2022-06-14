@@ -2,31 +2,31 @@ package com.architect.coders.pokedex.ui.main
 
 import android.os.Bundle
 import android.view.View
-import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.common.id
 import com.architect.coders.pokedex.common.visible
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentMainBinding
-import com.architect.coders.pokedex.model.PokemonItem
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val viewModel: MainViewModel by viewModels { MainViewModelFactory(PokemonRepository()) }
-    private val adapter = PokemonAdapter { pokemon, color -> viewModel.onPokemonClicked(pokemon, color) }
+    private val adapter = PokemonAdapter { pokemon, color -> mainState.onPokemonClicked(pokemon, color) }
+
+    private lateinit var mainState: MainState
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        mainState = buildMainState()
 
         requireActivity().window.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.teal_700)
 
@@ -46,7 +46,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         reycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                viewModel.scrolled(dy, recyclerView.canScrollVertically(1))
+                mainState.isLoadMorePokemon(dy, recyclerView) {
+                    viewModel.getMorePokemonList()
+                    mainState.enabledLoadMore()
+                }
             }
         })
     }
@@ -54,12 +57,5 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun FragmentMainBinding.updateUI(state: MainViewModel.UIState) {
         progress.visible = state.loading
         state.pokemonList?.let(adapter::submitList)
-        state.navigateTo?.let { navigateTo(it.first, it.second) }
-    }
-
-    private fun navigateTo(pokemon: PokemonItem, @ColorInt color: Int) {
-        val action = MainFragmentDirections.actionMainToDetail(pokemon.id(), color)
-        findNavController().navigate(action)
-        viewModel.onNavigateDone()
     }
 }

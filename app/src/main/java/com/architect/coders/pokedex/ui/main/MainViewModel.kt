@@ -1,6 +1,5 @@
 package com.architect.coders.pokedex.ui.main
 
-import androidx.annotation.ColorInt
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.model.PokemonItem
@@ -12,7 +11,6 @@ import kotlinx.coroutines.launch
 class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel() {
 
     private val pokemonList : MutableList<PokemonItem> = arrayListOf()
-    private var loading = true
     private var offset = 0
 
     private val _state = MutableStateFlow(UIState())
@@ -23,40 +21,25 @@ class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel
     }
 
     private fun refresh() {
+        _state.value = UIState(loading = true)
+        getPokemonList()
+    }
+
+    fun getMorePokemonList() {
+        offset += 20
+        getPokemonList()
+    }
+
+    private fun getPokemonList() {
         viewModelScope.launch {
-            _state.value = UIState(loading = true)
-            getPokemonList()
+            pokemonList.addAll(pokemoRepository.getPokemonList(offset).pokemonItems)
+            _state.value = UIState(pokemonList = pokemonList.toList())
         }
-    }
-
-    fun onPokemonClicked(pokemon: PokemonItem, @ColorInt color: Int){
-        _state.value = _state.value.copy(navigateTo = Pair(pokemon, color))
-    }
-
-    fun scrolled(dy: Int, canScrollVertically: Boolean) {
-        if (dy > 0 && loading && !canScrollVertically) {
-            loading = false
-            offset += 20
-            viewModelScope.launch {
-                getPokemonList()
-                loading = true
-            }
-        }
-    }
-
-    fun onNavigateDone() {
-        _state.value = _state.value.copy(navigateTo = null)
-    }
-
-    private suspend fun getPokemonList() {
-        pokemonList.addAll(pokemoRepository.getPokemonList(offset).pokemonItems)
-        _state.value = UIState(pokemonList = pokemonList.toList())
     }
 
     data class UIState(
         val loading: Boolean = false,
-        val pokemonList: List<PokemonItem>? = null,
-        val navigateTo: Pair<PokemonItem, Int>? = null
+        val pokemonList: List<PokemonItem>? = null
     )
 }
 

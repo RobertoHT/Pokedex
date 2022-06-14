@@ -7,7 +7,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.common.imageUrl
@@ -28,8 +27,12 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         safeArgs.colorSwatch)
     }
 
+    private lateinit var detailState: DetailState
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        detailState = buildDetailState()
 
         val binding = FragmentDetailBinding.bind(view).apply {
             btnFavorite.setOnClickListener {
@@ -37,7 +40,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             }
 
             btnMyCollection.setOnClickListener {
-                viewModel.collectionClicked()
+                detailState.goToTheGallery(viewModel.pokemonID)
             }
         }
 
@@ -62,7 +65,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
 
         state.pokemon?.let { setupDataInViews(it) }
-        state.navigateTo?.let { navigateTo(it) }
 
         state.favorite.let {
             val idDrawable = if (it) R.drawable.ic_favorite_bold else R.drawable.ic_favorite
@@ -82,11 +84,5 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
         val adapterStat = StatAdapter(pokemon.stats)
         statRecyclerView.adapter = adapterStat
-    }
-
-    private fun navigateTo(pokemonID: Int) {
-        val action = DetailFragmentDirections.actionDetailToGallery(pokemonID)
-        findNavController().navigate(action)
-        viewModel.onNavigateDone()
     }
 }
