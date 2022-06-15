@@ -5,16 +5,12 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
+import com.architect.coders.pokedex.common.launchCollectAndDiff
 import com.architect.coders.pokedex.databinding.FragmentGalleryBinding
 import com.architect.coders.pokedex.file.PokemonPhotoFile
 import com.architect.coders.pokedex.util.getGalleryItems
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class GalleryFragment : Fragment(R.layout.fragment_gallery) {
 
@@ -43,24 +39,21 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery) {
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect(::updateUI)
+        with(viewModel.state) {
+            launchCollectAndDiff(this, {it.photo}) { pair ->
+                pair?.let {
+                    adapter.addImage(it.first, it.second)
+                    viewModel.onTakePictureDone()
+                }
             }
-        }
-    }
-
-    private fun updateUI(state: GalleryViewModel.UIState) {
-        state.photo?.let {
-            adapter.addImage(it.first, it.second)
-            viewModel.onTakePictureDone()
-        }
-
-        state.uriImage?.let {
-            galleryState.onTakePicture(it) { result ->
-                viewModel.onPictureReady(result)
+            launchCollectAndDiff(this, {it.uriImage}) { uri ->
+                uri?.let {
+                    galleryState.onTakePicture(it) { result ->
+                        viewModel.onPictureReady(result)
+                    }
+                    viewModel.onUriDone()
+                }
             }
-            viewModel.onUriDone()
         }
     }
 }

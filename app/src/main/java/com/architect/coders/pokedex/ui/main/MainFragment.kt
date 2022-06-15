@@ -5,16 +5,12 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.R
+import com.architect.coders.pokedex.common.launchCollectAndDiff
 import com.architect.coders.pokedex.common.visible
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentMainBinding
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class MainFragment : Fragment(R.layout.fragment_main) {
 
@@ -35,10 +31,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             setupScrollListener(recycler)
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { binding.updateUI(it) }
-            }
+        with(viewModel.state) {
+            launchCollectAndDiff(this, {it.loading}) { binding.progress.visible = it }
+            launchCollectAndDiff(this, {it.pokemonList}) { adapter.submitList(it) }
         }
     }
 
@@ -52,10 +47,5 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         })
-    }
-
-    private fun FragmentMainBinding.updateUI(state: MainViewModel.UIState) {
-        progress.visible = state.loading
-        state.pokemonList?.let(adapter::submitList)
     }
 }
