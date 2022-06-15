@@ -1,9 +1,14 @@
 package com.architect.coders.pokedex.common
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.graphics.drawable.toBitmap
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.DiffUtil
 import com.architect.coders.pokedex.R
@@ -14,8 +19,16 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 private const val URL_SPRITE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
+
+var View.visible: Boolean
+    get() = visibility == View.VISIBLE
+    set(value) {
+        visibility = if (value) View.VISIBLE else View.GONE
+    }
 
 fun PokemonItem.id() : Int {
     val split = url.split("/")
@@ -99,4 +112,17 @@ inline fun <T> basicDiffUtil(
 
     override fun areContentsTheSame(oldItem: T, newItem: T): Boolean =
         areContentsTheSame(oldItem, newItem)
+}
+
+fun <T, U> LifecycleOwner.launchCollectAndDiff(
+    flow: Flow<T>,
+    mapf: (T) -> U,
+    state: Lifecycle.State = Lifecycle.State.STARTED,
+    body: (U) -> Unit
+) {
+    lifecycleScope.launch {
+        this@launchCollectAndDiff.repeatOnLifecycle(state) {
+            flow.map(mapf).distinctUntilChanged().collect(body)
+        }
+    }
 }

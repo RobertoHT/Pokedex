@@ -11,36 +11,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Pokedex">
-
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".ui.NavHostActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".ui.detail.DetailActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-
-        <activity
-            android:name=".ui.gallery.GalleryActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:exported="false" />
-
-        <activity
-            android:name=".ui.collection.CollectionActivity"
-            android:configChanges="orientation"
-            android:screenOrientation="portrait"
-            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

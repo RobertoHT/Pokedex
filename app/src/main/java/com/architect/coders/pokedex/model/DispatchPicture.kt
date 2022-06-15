@@ -2,14 +2,14 @@ package com.architect.coders.pokedex.model
 
 import android.net.Uri
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
-class DispatchPicture(activity: AppCompatActivity) {
+class DispatchPicture(fragment: Fragment) {
 
     private var onRequest: (Boolean) -> Unit = {}
-    private val launcher = activity.registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+    private val launcher = fragment.registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         onRequest(success)
     }
 
