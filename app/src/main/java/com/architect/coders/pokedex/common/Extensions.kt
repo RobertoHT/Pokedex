@@ -1,5 +1,6 @@
 package com.architect.coders.pokedex.common
 
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.widget.ImageView
@@ -11,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.DiffUtil
+import com.architect.coders.pokedex.App
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.model.PokemonDetail
 import com.architect.coders.pokedex.model.PokemonItem
@@ -23,6 +25,9 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 private const val URL_SPRITE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
+
+val Context.app: App
+    get() = applicationContext as App
 
 var View.visible: Boolean
     get() = visibility == View.VISIBLE
