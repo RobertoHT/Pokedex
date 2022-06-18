@@ -6,10 +6,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.common.imageUrl
-import com.architect.coders.pokedex.common.launchCollectAndDiff
-import com.architect.coders.pokedex.common.loadWithPath
-import com.architect.coders.pokedex.common.visible
+import com.architect.coders.pokedex.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentDetailBinding
 import com.architect.coders.pokedex.model.PokemonDetail
@@ -18,7 +15,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
     private val viewModel: DetailViewModel by viewModels { DetailViewModelFactory(
-        PokemonRepository(),
+        PokemonRepository(requireActivity().app),
         safeArgs.id,
         safeArgs.colorSwatch)
     }

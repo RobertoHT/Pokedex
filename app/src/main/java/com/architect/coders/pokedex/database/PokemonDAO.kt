@@ -1,19 +1,23 @@
 package com.architect.coders.pokedex.database
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PokemonDAO {
 
-    @Query("SELECT id FROM pokemon")
-    fun getAllPokemon(): List<Int>
+    @Query("SELECT * FROM pokemon")
+    fun getAllPokemon(): Flow<List<PokemonL>>
 
     @Transaction
     @Query("SELECT * FROM pokemon WHERE id = :id")
     fun findPokemonByID(id: Int): PokemonDetailL
 
     @Query("SELECT COUNT(id) FROM pokemon")
-    fun pokemonCount(): Int
+    suspend fun pokemonCount(): Int
+
+    @Insert
+    suspend fun insertPokemon(pokemonList: List<PokemonL>)
 
     @Update
     fun updatePokemon(pokemonL: PokemonL)

@@ -12,8 +12,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.App
 import com.architect.coders.pokedex.R
+import com.architect.coders.pokedex.database.PokemonL
 import com.architect.coders.pokedex.model.PokemonDetail
 import com.architect.coders.pokedex.model.PokemonItem
 import com.bumptech.glide.Glide
@@ -21,6 +24,9 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -40,8 +46,8 @@ fun PokemonItem.id() : Int {
     return split[split.size - 2].toInt()
 }
 
-fun PokemonItem.imageUrl() : String =
-    String.format(URL_SPRITE, id())
+fun PokemonL.imageUrl() : String =
+    String.format(URL_SPRITE, id)
 
 fun PokemonDetail.imageUrl() : String =
     String.format(URL_SPRITE, id)
@@ -131,3 +137,22 @@ fun <T, U> LifecycleOwner.launchCollectAndDiff(
         }
     }
 }
+
+fun <T> CoroutineScope.collectFlow(flow: Flow<T>, body: suspend (T) -> Unit) {
+    flow.onEach { body(it) }
+        .launchIn(this)
+}
+
+@ExperimentalCoroutinesApi
+val RecyclerView.lastVisibleEvents: Flow<Int>
+    get() = callbackFlow<Int> {
+        val lm = layoutManager as GridLayoutManager
+
+        val listener = object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                offer(lm.findLastVisibleItemPosition())
+            }
+        }
+        addOnScrollListener(listener)
+        awaitClose { removeOnScrollListener(listener) }
+    }.conflate()

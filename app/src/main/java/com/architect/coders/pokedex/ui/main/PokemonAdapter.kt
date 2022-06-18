@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.common.*
+import com.architect.coders.pokedex.database.PokemonL
 import com.architect.coders.pokedex.databinding.PokemonItemBinding
-import com.architect.coders.pokedex.model.PokemonItem
 
-class PokemonAdapter(private val pokemonClickListener: (PokemonItem, colorSwatch: Int) -> Unit) :
-    ListAdapter<PokemonItem, PokemonAdapter.ViewHolder>(basicDiffUtil { old, new -> old.id() == new.id() }) {
+class PokemonAdapter(private val pokemonClickListener: (PokemonL, colorSwatch: Int) -> Unit) :
+    ListAdapter<PokemonL, PokemonAdapter.ViewHolder>(basicDiffUtil { old, new -> old.id == new.id }) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = PokemonItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,12 +21,12 @@ class PokemonAdapter(private val pokemonClickListener: (PokemonItem, colorSwatch
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(private val binding: PokemonItemBinding, private val pokemonClickListener: (PokemonItem, colorSwatch: Int) -> Unit)
+    class ViewHolder(private val binding: PokemonItemBinding, private val pokemonClickListener: (PokemonL, colorSwatch: Int) -> Unit)
         : RecyclerView.ViewHolder(binding.root) {
 
         private var colorPokemon = R.color.white
 
-        fun bind(pokemon: PokemonItem) {
+        fun bind(pokemon: PokemonL) {
             binding.nameItem.text = pokemon.name
             binding.imageItem.loadWithPathAndGetColor(pokemon.imageUrl()) {
                 colorPokemon = it
