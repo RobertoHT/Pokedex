@@ -1,9 +1,9 @@
-package com.architect.coders.pokedex.model
+package com.architect.coders.pokedex.network
 
 
 import com.google.gson.annotations.SerializedName
 
-data class PokemonDetail(
+data class PokemonDetailR(
     @SerializedName("base_experience")
     val baseExperience: Int,
     @SerializedName("height")
@@ -21,9 +21,9 @@ data class PokemonDetail(
     @SerializedName("species")
     val species: Species,
     @SerializedName("stats")
-    val stats: List<Stat>,
+    val stats: List<StatR>,
     @SerializedName("types")
-    val types: List<Type>,
+    val types: List<TypeR>,
     @SerializedName("weight")
     val weight: Int
 )

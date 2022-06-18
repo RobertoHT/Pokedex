@@ -5,9 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.TypeItemBinding
 import com.architect.coders.pokedex.util.getTypePokemonColor
-import com.architect.coders.pokedex.model.Type
+import com.architect.coders.pokedex.network.TypeR
 
-class TypeAdapter(private val types: List<Type>) : RecyclerView.Adapter<TypeAdapter.ViewHolder>() {
+class TypeAdapter(private val types: List<TypeR>) : RecyclerView.Adapter<TypeAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = TypeItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -21,7 +21,7 @@ class TypeAdapter(private val types: List<Type>) : RecyclerView.Adapter<TypeAdap
     override fun getItemCount(): Int = types.size
 
     class ViewHolder(private val binding: TypeItemBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(type: Type) {
+        fun bind(type: TypeR) {
             val typeName = type.type.name
             binding.typePoke.text = typeName
             binding.typeCardView.setCardBackgroundColor(itemView.context.getColor(

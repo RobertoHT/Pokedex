@@ -5,7 +5,7 @@ import com.architect.coders.pokedex.common.id
 import com.architect.coders.pokedex.database.PokemonL
 import com.architect.coders.pokedex.datasource.PokemonLocalDataSource
 import com.architect.coders.pokedex.datasource.PokemonRemoteDataSource
-import com.architect.coders.pokedex.model.PokemonItem
+import com.architect.coders.pokedex.network.PokemonItemR
 import com.architect.coders.pokedex.network.PokeClient
 
 private const val PAGE_THRESHOLD = 6
@@ -29,9 +29,9 @@ class PokemonRepository(application: App) {
     suspend fun getPokemonDetail(pokemonID: Int) =
         PokeClient.service.getPokemonDetail(pokemonID)
 
-    private fun List<PokemonItem>.toLocalModel(): List<PokemonL> = map { it.toLocalModel() }
+    private fun List<PokemonItemR>.toLocalModel(): List<PokemonL> = map { it.toLocalModel() }
 
-    private fun PokemonItem.toLocalModel(): PokemonL = PokemonL(
+    private fun PokemonItemR.toLocalModel(): PokemonL = PokemonL(
         id(),
         name,
         0,

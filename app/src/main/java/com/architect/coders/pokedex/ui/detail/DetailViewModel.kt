@@ -2,7 +2,7 @@ package com.architect.coders.pokedex.ui.detail
 
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.model.PokemonDetail
+import com.architect.coders.pokedex.network.PokemonDetailR
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,7 +36,7 @@ class DetailViewModel(
     }
 
     data class UIState(
-        val pokemon: PokemonDetail? = null,
+        val pokemon: PokemonDetailR? = null,
         val colorSwatch: Int = 0,
         val loading: Boolean = false,
         val views: Boolean = false,

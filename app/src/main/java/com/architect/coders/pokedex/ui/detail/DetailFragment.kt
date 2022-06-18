@@ -9,7 +9,7 @@ import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentDetailBinding
-import com.architect.coders.pokedex.model.PokemonDetail
+import com.architect.coders.pokedex.network.PokemonDetailR
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 
@@ -55,7 +55,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
     }
 
-    private fun FragmentDetailBinding.setupDataInViews(pokemon: PokemonDetail) {
+    private fun FragmentDetailBinding.setupDataInViews(pokemon: PokemonDetailR) {
         nameDetail.text = pokemon.name
         weightDetail.text = getString(R.string.detail_weight, pokemon.weight)
         heightDetail.text = getString(R.string.detail_height, pokemon.height)

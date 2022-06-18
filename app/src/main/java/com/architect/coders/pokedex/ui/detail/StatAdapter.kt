@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.StatItemBinding
 import com.architect.coders.pokedex.util.getStatPokemonColor
 import com.architect.coders.pokedex.util.getStatPokemonText
-import com.architect.coders.pokedex.model.Stat
+import com.architect.coders.pokedex.network.StatR
 
-class StatAdapter(private val stats: List<Stat>) : RecyclerView.Adapter<StatAdapter.ViewHolder>() {
+class StatAdapter(private val stats: List<StatR>) : RecyclerView.Adapter<StatAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = StatItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -23,7 +23,7 @@ class StatAdapter(private val stats: List<Stat>) : RecyclerView.Adapter<StatAdap
 
     class ViewHolder(private val binding: StatItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(stat: Stat) {
+        fun bind(stat: StatR) {
             binding.statTitle.text = getStatPokemonText(stat.stat.name)
             binding.statProgress.progress = stat.baseStat.toFloat()
             binding.statProgress.labelText = stat.baseStat.toString()

@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.App
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.database.PokemonL
-import com.architect.coders.pokedex.model.PokemonDetail
-import com.architect.coders.pokedex.model.PokemonItem
+import com.architect.coders.pokedex.network.PokemonDetailR
+import com.architect.coders.pokedex.network.PokemonItemR
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -41,7 +41,7 @@ var View.visible: Boolean
         visibility = if (value) View.VISIBLE else View.GONE
     }
 
-fun PokemonItem.id() : Int {
+fun PokemonItemR.id() : Int {
     val split = url.split("/")
     return split[split.size - 2].toInt()
 }
@@ -49,7 +49,7 @@ fun PokemonItem.id() : Int {
 fun PokemonL.imageUrl() : String =
     String.format(URL_SPRITE, id)
 
-fun PokemonDetail.imageUrl() : String =
+fun PokemonDetailR.imageUrl() : String =
     String.format(URL_SPRITE, id)
 
 fun TextView.setCollectionTitle(type: PokeCollec) {
