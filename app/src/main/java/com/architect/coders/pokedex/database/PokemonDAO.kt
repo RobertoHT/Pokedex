@@ -9,24 +9,27 @@ interface PokemonDAO {
     @Query("SELECT * FROM pokemon")
     fun getAllPokemon(): Flow<List<PokemonL>>
 
-    @Transaction
-    @Query("SELECT * FROM pokemon WHERE id = :id")
-    fun findPokemonByID(id: Int): PokemonDetailL
-
     @Query("SELECT COUNT(id) FROM pokemon")
     suspend fun pokemonCount(): Int
 
     @Insert
     suspend fun insertPokemon(pokemonList: List<PokemonL>)
 
+    @Query("SELECT COUNT(id) FROM pokemon WHERE id = :id AND weight = 0 AND height = 0")
+    suspend fun isPokemonByIDEmpty(id: Int): Int
+
     @Update
-    fun updatePokemon(pokemonL: PokemonL)
+    suspend fun updatePokemon(pokemonL: PokemonL)
 
     @Insert
-    fun insertTypes(types: List<TypeL>)
+    suspend fun insertTypes(types: List<TypeL>)
 
     @Insert
-    fun insertStats(stats: List<StatL>)
+    suspend fun insertStats(stats: List<StatL>)
+
+    @Transaction
+    @Query("SELECT * FROM pokemon WHERE id = :id")
+    fun findPokemonByID(id: Int): Flow<PokemonDetailL>
 
     @Query("SELECT * FROM collection WHERE pokemonID = :id")
     fun getAllCollectionByPokemon(id: Int): List<CollectionL>

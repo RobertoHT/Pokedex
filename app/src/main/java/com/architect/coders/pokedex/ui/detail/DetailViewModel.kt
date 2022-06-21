@@ -2,10 +2,11 @@ package com.architect.coders.pokedex.ui.detail
 
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.network.PokemonDetailR
+import com.architect.coders.pokedex.database.PokemonDetailL
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
@@ -20,13 +21,13 @@ class DetailViewModel(
     private var favorite: Boolean = false
 
     init {
-        refresh()
-    }
-
-    private fun refresh() {
         viewModelScope.launch {
             _state.value = UIState(loading = true)
-            _state.value = UIState(pokemon = pokemonRepository.getPokemonDetail(pokemonID), colorSwatch = colorSwatch, views = true)
+            pokemonRepository.checkPokemonDetail(pokemonID)
+
+            pokemonRepository.getPokemonDetail(pokemonID).collect { pokemonDetail ->
+                _state.value = UIState(pokemon = pokemonDetail, colorSwatch = colorSwatch, views = true)
+            }
         }
     }
 
@@ -36,7 +37,7 @@ class DetailViewModel(
     }
 
     data class UIState(
-        val pokemon: PokemonDetailR? = null,
+        val pokemon: PokemonDetailL? = null,
         val colorSwatch: Int = 0,
         val loading: Boolean = false,
         val views: Boolean = false,

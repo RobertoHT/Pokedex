@@ -8,8 +8,8 @@ import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
+import com.architect.coders.pokedex.database.PokemonDetailL
 import com.architect.coders.pokedex.databinding.FragmentDetailBinding
-import com.architect.coders.pokedex.network.PokemonDetailR
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 
@@ -42,6 +42,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             launchCollectAndDiff(this, {it.views}) {
                 binding.cardView.visible = it
                 binding.imageDetail.visible = it
+                binding.btnFavorite.visible = it
             }
             launchCollectAndDiff(this, {it.colorSwatch}) {
                 requireActivity().window.statusBarColor = it
@@ -55,17 +56,17 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
     }
 
-    private fun FragmentDetailBinding.setupDataInViews(pokemon: PokemonDetailR) {
-        nameDetail.text = pokemon.name
-        weightDetail.text = getString(R.string.detail_weight, pokemon.weight)
-        heightDetail.text = getString(R.string.detail_height, pokemon.height)
+    private fun FragmentDetailBinding.setupDataInViews(detail: PokemonDetailL) {
+        nameDetail.text = detail.pokemon.name
+        weightDetail.text = getString(R.string.detail_weight, detail.pokemon.weight)
+        heightDetail.text = getString(R.string.detail_height, detail.pokemon.height)
 
-        imageDetail.loadWithPath(pokemon.imageUrl())
+        imageDetail.loadWithPath(detail.pokemon.imageUrl())
 
-        val adapterType = TypeAdapter(pokemon.types)
+        val adapterType = TypeAdapter(detail.types)
         typeRecyclerView.adapter = adapterType
 
-        val adapterStat = StatAdapter(pokemon.stats)
+        val adapterStat = StatAdapter(detail.stats)
         statRecyclerView.adapter = adapterStat
     }
 }
