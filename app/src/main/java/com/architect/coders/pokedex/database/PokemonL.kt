@@ -8,5 +8,6 @@ data class PokemonL(
     @PrimaryKey val id: Int,
     val name: String,
     val weight: Int,
-    val height: Int
+    val height: Int,
+    val favorite: Boolean
 )

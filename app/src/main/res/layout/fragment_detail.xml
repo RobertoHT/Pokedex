@@ -176,6 +176,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_favorite"
             android:backgroundTint="@color/purple_200"
+            app:tint="@null"
+            app:maxImageSize="35dp"
             app:layout_constraintStart_toEndOf="@+id/imageDetail"
             app:layout_constraintEnd_toEndOf="@+id/cardView"
             app:layout_constraintTop_toTopOf="@+id/imageDetail"

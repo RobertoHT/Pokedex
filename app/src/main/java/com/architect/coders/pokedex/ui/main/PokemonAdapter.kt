@@ -1,6 +1,7 @@
 package com.architect.coders.pokedex.ui.main
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -32,6 +33,7 @@ class PokemonAdapter(private val pokemonClickListener: (PokemonL, colorSwatch: I
                 colorPokemon = it
                 binding.cardview.setCardBackgroundColor(it)
             }
+            binding.favoriteItem.visibility = if (pokemon.favorite) View.VISIBLE else View.GONE
 
             binding.root.setOnClickListener {
                 pokemonClickListener(pokemon, colorPokemon)

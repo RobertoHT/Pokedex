@@ -18,8 +18,6 @@ class DetailViewModel(
     private val _state = MutableStateFlow(UIState())
     val state: StateFlow<UIState> = _state.asStateFlow()
 
-    private var favorite: Boolean = false
-
     init {
         viewModelScope.launch {
             _state.value = UIState(loading = true)
@@ -31,17 +29,17 @@ class DetailViewModel(
         }
     }
 
-    fun favoriteClicked() {
-        favorite = !favorite
-        _state.value = _state.value.copy(favorite = favorite)
+    fun onFavoriteClicked() {
+        viewModelScope.launch {
+            _state.value.pokemon?.let { pokemonRepository.switchFavorite(it.pokemon) }
+        }
     }
 
     data class UIState(
         val pokemon: PokemonDetailL? = null,
         val colorSwatch: Int = 0,
         val loading: Boolean = false,
-        val views: Boolean = false,
-        val favorite: Boolean = false
+        val views: Boolean = false
     )
 }
 

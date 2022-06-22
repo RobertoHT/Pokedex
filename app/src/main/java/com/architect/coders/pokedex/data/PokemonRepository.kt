@@ -48,14 +48,16 @@ class PokemonRepository(application: App) {
         localDataSource.update(pokemonDetail.toLocalModel())
     }
 
+    suspend fun switchFavorite(pokemon: PokemonL) {
+        val updatePokemon = pokemon.copy(favorite = !pokemon.favorite)
+        localDataSource.update(updatePokemon)
+    }
+
     private fun List<PokemonItemR>.toLocalModel(): List<PokemonL> = map { it.toLocalModel() }
 
-    private fun PokemonItemR.toLocalModel(): PokemonL = PokemonL(id(), name, 0, 0
-    )
+    private fun PokemonItemR.toLocalModel(): PokemonL = PokemonL(id(), name, 0, 0, false)
 
-    private fun PokemonDetailR.toLocalModel(): PokemonL = PokemonL(
-        id, name, weight, height
-    )
+    private fun PokemonDetailR.toLocalModel(): PokemonL = PokemonL(id, name, weight, height, false)
 
     private fun List<TypeR>.toTypeLocalModel(id: Int): List<TypeL> = map { it.toLocalModel(id) }
 

@@ -29,7 +29,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
         val binding = FragmentDetailBinding.bind(view).apply {
             btnFavorite.setOnClickListener {
-                viewModel.favoriteClicked()
+                viewModel.onFavoriteClicked()
             }
 
             btnMyCollection.setOnClickListener {
@@ -49,10 +49,6 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                 binding.containerDetail.setBackgroundColor(it)
             }
             launchCollectAndDiff(this, {it.pokemon}) { it?.let { detail -> binding.setupDataInViews(detail) } }
-            launchCollectAndDiff(this, {it.favorite}) {
-                val idDrawable = if (it) R.drawable.ic_favorite_bold else R.drawable.ic_favorite
-                binding.btnFavorite.setImageResource(idDrawable)
-            }
         }
     }
 
@@ -62,6 +58,9 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         heightDetail.text = getString(R.string.detail_height, detail.pokemon.height)
 
         imageDetail.loadWithPath(detail.pokemon.imageUrl())
+
+        val idDrawable = if (detail.pokemon.favorite) R.drawable.ic_favorite_bold else R.drawable.ic_favorite
+        btnFavorite.setImageResource(idDrawable)
 
         val adapterType = TypeAdapter(detail.types)
         typeRecyclerView.adapter = adapterType
