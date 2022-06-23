@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.App
 import com.architect.coders.pokedex.R
+import com.architect.coders.pokedex.database.CollectionL
 import com.architect.coders.pokedex.database.PokemonL
+import com.architect.coders.pokedex.model.GalleryItem
 import com.architect.coders.pokedex.network.PokemonDetailR
 import com.architect.coders.pokedex.network.PokemonItemR
 import com.bumptech.glide.Glide
@@ -156,3 +158,18 @@ val RecyclerView.lastVisibleEvents: Flow<Int>
         addOnScrollListener(listener)
         awaitClose { removeOnScrollListener(listener) }
     }.conflate()
+
+fun List<CollectionL>.toGalleryItem(path: String): List<GalleryItem> =
+    groupBy { it.type }
+        .toList()
+        .map { GalleryItem(it.first.getTypeById(), it.second.toStringList(path)) }
+
+private fun List<CollectionL>.toStringList(path: String): MutableList<String> =
+    map { "$path/${it.photo}" }.toMutableList()
+
+private fun Int.getTypeById(): PokeCollec =
+    when(this) {
+        1 -> PokeCollec.AMIIBO
+        2 -> PokeCollec.PLUSH
+        else -> PokeCollec.OTHER
+    }

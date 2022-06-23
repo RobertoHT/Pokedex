@@ -8,21 +8,24 @@ import java.io.File
 
 class PokemonPhotoFile(private val application: Application) {
 
-    fun createFile(nameFile: String) : Pair<Uri, String> {
-        val filePath: String
+    val path: String = getStorageDir()?.absolutePath!!
+
+    fun createFile(nameFile: String): Uri {
         val file = File.createTempFile(
             nameFile,
             ".jpg",
             getStorageDir()
-        ).apply {
-            filePath = absolutePath
-        }
+        )
 
-        val uri = FileProvider.getUriForFile(application, "com.architect.coders.pokedex.fileprovider", file)
-        return Pair(uri, filePath)
+        return FileProvider.getUriForFile(
+            application,
+            "com.architect.coders.pokedex.fileprovider",
+            file
+        )
     }
 
-    fun deleteImageFile(filePath: String) {
+    fun deleteImageFile(fileName: String) {
+        val filePath = "$path/$fileName"
         val fileTemp = File(filePath)
         fileTemp.delete()
     }

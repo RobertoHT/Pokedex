@@ -22,4 +22,8 @@ class PokemonLocalDataSource(private val pokemonDao: PokemonDAO) {
     suspend fun saveTypes(types: List<TypeL>) = pokemonDao.insertTypes(types)
 
     suspend fun saveStats(stats: List<StatL>) = pokemonDao.insertStats(stats)
+
+    fun getCollectionById(id: Int): Flow<List<CollectionL>> = pokemonDao.getAllCollectionByPokemon(id)
+
+    suspend fun saveCollection(collection: CollectionL) = pokemonDao.insertCollection(collection)
 }

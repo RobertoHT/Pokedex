@@ -32,8 +32,8 @@ interface PokemonDAO {
     fun findPokemonByID(id: Int): Flow<PokemonDetailL>
 
     @Query("SELECT * FROM collection WHERE pokemonID = :id")
-    fun getAllCollectionByPokemon(id: Int): List<CollectionL>
+    fun getAllCollectionByPokemon(id: Int): Flow<List<CollectionL>>
 
     @Insert
-    fun insertCollection(collection: CollectionL)
+    suspend fun insertCollection(collection: CollectionL)
 }

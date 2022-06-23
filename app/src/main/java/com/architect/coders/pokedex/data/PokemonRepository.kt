@@ -2,10 +2,7 @@ package com.architect.coders.pokedex.data
 
 import com.architect.coders.pokedex.App
 import com.architect.coders.pokedex.common.id
-import com.architect.coders.pokedex.database.PokemonDetailL
-import com.architect.coders.pokedex.database.PokemonL
-import com.architect.coders.pokedex.database.StatL
-import com.architect.coders.pokedex.database.TypeL
+import com.architect.coders.pokedex.database.*
 import com.architect.coders.pokedex.datasource.PokemonLocalDataSource
 import com.architect.coders.pokedex.datasource.PokemonRemoteDataSource
 import com.architect.coders.pokedex.network.PokemonDetailR
@@ -51,6 +48,12 @@ class PokemonRepository(application: App) {
     suspend fun switchFavorite(pokemon: PokemonL) {
         val updatePokemon = pokemon.copy(favorite = !pokemon.favorite)
         localDataSource.update(updatePokemon)
+    }
+
+    fun getCollectionByPokemon(pokemonID: Int): Flow<List<CollectionL>> = localDataSource.getCollectionById(pokemonID)
+
+    suspend fun saveCollectionByPokemon(collection: CollectionL) {
+        localDataSource.saveCollection(collection)
     }
 
     private fun List<PokemonItemR>.toLocalModel(): List<PokemonL> = map { it.toLocalModel() }
