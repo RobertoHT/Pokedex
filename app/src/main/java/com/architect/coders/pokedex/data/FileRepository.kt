@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.file
+package com.architect.coders.pokedex.data
 
 import android.app.Application
 import android.net.Uri
@@ -6,7 +6,7 @@ import android.os.Environment
 import androidx.core.content.FileProvider
 import java.io.File
 
-class PokemonPhotoFile(private val application: Application) {
+class FileRepository(private val application: Application) {
 
     val path: String = getStorageDir()?.absolutePath!!
 

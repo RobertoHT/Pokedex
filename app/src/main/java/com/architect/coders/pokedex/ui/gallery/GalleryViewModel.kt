@@ -7,7 +7,7 @@ import com.architect.coders.pokedex.common.PokeCollec
 import com.architect.coders.pokedex.common.toGalleryItem
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.database.CollectionL
-import com.architect.coders.pokedex.file.PokemonPhotoFile
+import com.architect.coders.pokedex.data.FileRepository
 import com.architect.coders.pokedex.model.GalleryItem
 import com.architect.coders.pokedex.util.getCollection
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
 
 class GalleryViewModel(
     private val pokemonID: Int,
-    private val pokemonFile : PokemonPhotoFile,
+    private val fileRepository : FileRepository,
     private val pokemonRepository: PokemonRepository
 ) : ViewModel() {
 
@@ -28,7 +28,7 @@ class GalleryViewModel(
     init {
         viewModelScope.launch {
             pokemonRepository.getCollectionByPokemon(pokemonID).collect { collectionList ->
-                _state.value = UIState(colletionList = collectionList.toGalleryItem(pokemonFile.path))
+                _state.value = UIState(colletionList = collectionList.toGalleryItem(fileRepository.path))
             }
         }
     }
@@ -36,7 +36,7 @@ class GalleryViewModel(
     fun onCreatePictureFile(@IdRes fabID: Int) {
         val pokeType = getCollection(fabID)
         val nameFile = "Poke_${pokemonID}_${pokeType.id}_"
-        val imageData = pokemonFile.createFile(nameFile)
+        val imageData = fileRepository.createFile(nameFile)
         _state.value = _state.value.copy(nameImage = imageData.lastPathSegment, type = pokeType, uriImage = imageData)
     }
 
@@ -48,7 +48,7 @@ class GalleryViewModel(
                 onTakePictureDone()
             }
         } else {
-            pokemonFile.deleteImageFile(_state.value.nameImage!!)
+            fileRepository.deleteImageFile(_state.value.nameImage!!)
             onTakePictureDone()
         }
     }
@@ -72,10 +72,10 @@ class GalleryViewModel(
 @Suppress("UNCHECKED_CAST")
 class GalleryViewModelFactory(
     private val pokemonID: Int,
-    private val pokemonFile : PokemonPhotoFile,
+    private val fileRepository : FileRepository,
     private val pokemoRepository: PokemonRepository
     ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return GalleryViewModel(pokemonID, pokemonFile, pokemoRepository) as T
+        return GalleryViewModel(pokemonID, fileRepository, pokemoRepository) as T
     }
 }

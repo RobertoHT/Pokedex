@@ -11,14 +11,14 @@ import com.architect.coders.pokedex.common.app
 import com.architect.coders.pokedex.common.launchCollectAndDiff
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentGalleryBinding
-import com.architect.coders.pokedex.file.PokemonPhotoFile
+import com.architect.coders.pokedex.data.FileRepository
 
 class GalleryFragment : Fragment(R.layout.fragment_gallery) {
 
     private val safeArgs: GalleryFragmentArgs by navArgs()
     private val viewModel: GalleryViewModel by viewModels { GalleryViewModelFactory(
         safeArgs.id,
-        PokemonPhotoFile(requireActivity().application),
+        FileRepository(requireActivity().application),
         PokemonRepository(requireActivity().app)
     ) }
 
