@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.model
+package com.architect.coders.pokedex.network
 
 
 import com.google.gson.annotations.SerializedName
@@ -11,5 +11,5 @@ data class PokemonListResult(
     @SerializedName("previous")
     val previous: String,
     @SerializedName("results")
-    val pokemonItems: List<PokemonItem>
+    val pokemonItems: List<PokemonItemR>
 )

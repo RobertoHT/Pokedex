@@ -6,19 +6,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.common.imageUrl
-import com.architect.coders.pokedex.common.launchCollectAndDiff
-import com.architect.coders.pokedex.common.loadWithPath
-import com.architect.coders.pokedex.common.visible
+import com.architect.coders.pokedex.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
+import com.architect.coders.pokedex.database.PokemonDetailL
 import com.architect.coders.pokedex.databinding.FragmentDetailBinding
-import com.architect.coders.pokedex.model.PokemonDetail
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
     private val viewModel: DetailViewModel by viewModels { DetailViewModelFactory(
-        PokemonRepository(),
+        PokemonRepository(requireActivity().app),
         safeArgs.id,
         safeArgs.colorSwatch)
     }
@@ -32,7 +29,7 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
         val binding = FragmentDetailBinding.bind(view).apply {
             btnFavorite.setOnClickListener {
-                viewModel.favoriteClicked()
+                viewModel.onFavoriteClicked()
             }
 
             btnMyCollection.setOnClickListener {
@@ -45,30 +42,32 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             launchCollectAndDiff(this, {it.views}) {
                 binding.cardView.visible = it
                 binding.imageDetail.visible = it
+                binding.btnFavorite.visible = it
             }
             launchCollectAndDiff(this, {it.colorSwatch}) {
                 requireActivity().window.statusBarColor = it
                 binding.containerDetail.setBackgroundColor(it)
             }
             launchCollectAndDiff(this, {it.pokemon}) { it?.let { detail -> binding.setupDataInViews(detail) } }
-            launchCollectAndDiff(this, {it.favorite}) {
-                val idDrawable = if (it) R.drawable.ic_favorite_bold else R.drawable.ic_favorite
-                binding.btnFavorite.setImageResource(idDrawable)
-            }
+            launchCollectAndDiff(this, {it.error}) { it?.let {
+                showSnackbar(binding.containerDetail, requireContext().errorToString(it)) } }
         }
     }
 
-    private fun FragmentDetailBinding.setupDataInViews(pokemon: PokemonDetail) {
-        nameDetail.text = pokemon.name
-        weightDetail.text = getString(R.string.detail_weight, pokemon.weight)
-        heightDetail.text = getString(R.string.detail_height, pokemon.height)
+    private fun FragmentDetailBinding.setupDataInViews(detail: PokemonDetailL) {
+        nameDetail.text = detail.pokemon.name
+        weightDetail.text = getString(R.string.detail_weight, detail.pokemon.weight)
+        heightDetail.text = getString(R.string.detail_height, detail.pokemon.height)
 
-        imageDetail.loadWithPath(pokemon.imageUrl())
+        imageDetail.loadWithPath(detail.pokemon.imageUrl())
 
-        val adapterType = TypeAdapter(pokemon.types)
+        val idDrawable = if (detail.pokemon.favorite) R.drawable.ic_favorite_bold else R.drawable.ic_favorite
+        btnFavorite.setImageResource(idDrawable)
+
+        val adapterType = TypeAdapter(detail.types)
         typeRecyclerView.adapter = adapterType
 
-        val adapterStat = StatAdapter(pokemon.stats)
+        val adapterStat = StatAdapter(detail.stats)
         statRecyclerView.adapter = adapterStat
     }
 }

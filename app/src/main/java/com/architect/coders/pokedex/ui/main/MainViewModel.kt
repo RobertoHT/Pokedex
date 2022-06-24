@@ -2,44 +2,40 @@ package com.architect.coders.pokedex.ui.main
 
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.model.PokemonItem
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.architect.coders.pokedex.database.PokemonL
+import com.architect.coders.pokedex.model.Error
+import com.architect.coders.pokedex.model.toError
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel() {
-
-    private val pokemonList : MutableList<PokemonItem> = arrayListOf()
-    private var offset = 0
 
     private val _state = MutableStateFlow(UIState())
     val state: StateFlow<UIState> = _state.asStateFlow()
 
     init {
-        refresh()
-    }
-
-    private fun refresh() {
-        _state.value = UIState(loading = true)
-        getPokemonList()
-    }
-
-    fun getMorePokemonList() {
-        offset += 20
-        getPokemonList()
-    }
-
-    private fun getPokemonList() {
         viewModelScope.launch {
-            pokemonList.addAll(pokemoRepository.getPokemonList(offset).pokemonItems)
-            _state.value = UIState(pokemonList = pokemonList.toList())
+            refresh()
+            pokemoRepository.pokemonList
+                .catch { cause -> _state.update { it.copy(error = cause.toError()) } }
+                .collect { pokemonList -> _state.update { UIState(pokemonList = pokemonList) } }
         }
+    }
+
+    private suspend fun refresh() {
+        _state.value = UIState(loading = true)
+        notifyLastVisible(0)
+    }
+
+    suspend fun notifyLastVisible(lastVisible: Int) {
+        val cause = pokemoRepository.checkRequierePokemonData(lastVisible)
+        _state.update { it.copy(error = cause) }
     }
 
     data class UIState(
         val loading: Boolean = false,
-        val pokemonList: List<PokemonItem>? = null
+        val pokemonList: List<PokemonL>? = null,
+        val error: Error? = null
     )
 }
 

@@ -2,14 +2,16 @@ package com.architect.coders.pokedex.ui.gallery
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.architect.coders.pokedex.common.basicDiffUtil
 import com.architect.coders.pokedex.databinding.GalleryItemBinding
 import com.architect.coders.pokedex.model.GalleryItem
-import com.architect.coders.pokedex.common.PokeCollec
 import com.architect.coders.pokedex.common.setCollectionTitle
 
-class GalleryAdapter(private val galleryList: List<GalleryItem>, private val collectionClickListener: (String) -> Unit) :
-    RecyclerView.Adapter<GalleryAdapter.ViewHolder>() {
+class GalleryAdapter(private val collectionClickListener: (String) -> Unit) :
+    ListAdapter<GalleryItem, GalleryAdapter.ViewHolder>(
+        basicDiffUtil { old, new -> old.photos.size == new.photos.size }) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = GalleryItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -17,17 +19,7 @@ class GalleryAdapter(private val galleryList: List<GalleryItem>, private val col
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(galleryList[position], collectionClickListener)
-    }
-
-    override fun getItemCount(): Int = galleryList.size
-
-    fun addImage(type: PokeCollec, image: String) {
-        val index = galleryList.indexOfFirst { it.type == type }
-        val item = galleryList[index]
-
-        item.photos.add(image)
-        notifyItemChanged(index)
+        holder.bind(getItem(position), collectionClickListener)
     }
 
     class ViewHolder(private val binding: GalleryItemBinding) : RecyclerView.ViewHolder(binding.root) {

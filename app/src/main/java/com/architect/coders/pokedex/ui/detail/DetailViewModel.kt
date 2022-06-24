@@ -2,10 +2,10 @@ package com.architect.coders.pokedex.ui.detail
 
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.model.PokemonDetail
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.architect.coders.pokedex.database.PokemonDetailL
+import com.architect.coders.pokedex.model.Error
+import com.architect.coders.pokedex.model.toError
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
@@ -17,30 +17,42 @@ class DetailViewModel(
     private val _state = MutableStateFlow(UIState())
     val state: StateFlow<UIState> = _state.asStateFlow()
 
-    private var favorite: Boolean = false
-
     init {
-        refresh()
-    }
-
-    private fun refresh() {
         viewModelScope.launch {
             _state.value = UIState(loading = true)
-            _state.value = UIState(pokemon = pokemonRepository.getPokemonDetail(pokemonID), colorSwatch = colorSwatch, views = true)
+
+            val cause = pokemonRepository.checkPokemonDetail(pokemonID)
+            _state.update { it.copy(error = cause) }
+
+            pokemonRepository.getPokemonDetail(pokemonID)
+                .catch { error -> _state.update { it.copy(error = error.toError()) } }
+                .collect { updateState(it) }
         }
     }
 
-    fun favoriteClicked() {
-        favorite = !favorite
-        _state.value = _state.value.copy(favorite = favorite)
+    private fun updateState(detail: PokemonDetailL?) {
+        if (detail != null) {
+            _state.update { UIState(pokemon = detail, colorSwatch = colorSwatch, views = true) }
+        } else {
+            _state.update { UIState(colorSwatch = colorSwatch) }
+        }
+    }
+
+    fun onFavoriteClicked() {
+        viewModelScope.launch {
+            _state.value.pokemon?.let { detail ->
+                val cause = pokemonRepository.switchFavorite(detail.pokemon)
+                _state.update { it.copy(error = cause) }
+            }
+        }
     }
 
     data class UIState(
-        val pokemon: PokemonDetail? = null,
+        val pokemon: PokemonDetailL? = null,
         val colorSwatch: Int = 0,
         val loading: Boolean = false,
         val views: Boolean = false,
-        val favorite: Boolean = false
+        val error: Error? = null
     )
 }
 
