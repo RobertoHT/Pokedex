@@ -8,10 +8,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.common.app
+import com.architect.coders.pokedex.common.errorToString
 import com.architect.coders.pokedex.common.launchCollectAndDiff
+import com.architect.coders.pokedex.common.showSnackbar
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentGalleryBinding
 import com.architect.coders.pokedex.data.FileRepository
+import com.google.android.material.snackbar.Snackbar
 
 class GalleryFragment : Fragment(R.layout.fragment_gallery) {
 
@@ -32,7 +35,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery) {
 
         requireActivity().window.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.teal_700)
 
-        FragmentGalleryBinding.bind(view).apply {
+        val binding = FragmentGalleryBinding.bind(view).apply {
             adapter = GalleryAdapter { image -> galleryState.onImageClicked(image) }
             amiiboRecycler.adapter = adapter
 
@@ -53,6 +56,9 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery) {
                     viewModel.onUriDone()
                 }
             }
+            launchCollectAndDiff(this, {it.error}) { it?.let {
+                showSnackbar(binding.containerGallery, requireContext().errorToString(it))
+            } }
         }
     }
 }

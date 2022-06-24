@@ -49,6 +49,8 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                 binding.containerDetail.setBackgroundColor(it)
             }
             launchCollectAndDiff(this, {it.pokemon}) { it?.let { detail -> binding.setupDataInViews(detail) } }
+            launchCollectAndDiff(this, {it.error}) { it?.let {
+                showSnackbar(binding.containerDetail, requireContext().errorToString(it)) } }
         }
     }
 

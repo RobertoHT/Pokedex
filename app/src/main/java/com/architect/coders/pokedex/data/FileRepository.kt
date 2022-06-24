@@ -4,27 +4,35 @@ import android.app.Application
 import android.net.Uri
 import android.os.Environment
 import androidx.core.content.FileProvider
+import arrow.core.Either
+import arrow.core.left
+import arrow.core.right
+import com.architect.coders.pokedex.model.Error
+import com.architect.coders.pokedex.model.toError
+import com.architect.coders.pokedex.model.tryCall
 import java.io.File
 
 class FileRepository(private val application: Application) {
 
     val path: String = getStorageDir()?.absolutePath!!
 
-    fun createFile(nameFile: String): Uri {
+    fun createFile(nameFile: String): Either<Error, Uri> = try {
         val file = File.createTempFile(
             nameFile,
             ".jpg",
             getStorageDir()
         )
 
-        return FileProvider.getUriForFile(
+        FileProvider.getUriForFile(
             application,
             "com.architect.coders.pokedex.fileprovider",
             file
-        )
+        ).right()
+    } catch (e: Exception) {
+        e.toError().left()
     }
 
-    fun deleteImageFile(fileName: String) {
+    fun deleteImageFile(fileName: String): Error? = tryCall {
         val filePath = "$path/$fileName"
         val fileTemp = File(filePath)
         fileTemp.delete()

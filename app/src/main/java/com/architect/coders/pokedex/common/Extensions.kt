@@ -18,6 +18,7 @@ import com.architect.coders.pokedex.App
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.database.CollectionL
 import com.architect.coders.pokedex.database.PokemonL
+import com.architect.coders.pokedex.model.Error
 import com.architect.coders.pokedex.model.GalleryItem
 import com.architect.coders.pokedex.network.PokemonDetailR
 import com.architect.coders.pokedex.network.PokemonItemR
@@ -26,6 +27,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
@@ -102,8 +104,8 @@ fun ImageView.loadWithPathAndGetColor(path: String,  listener: (color: Int) -> U
                 dataSource: DataSource?,
                 isFirstResource: Boolean
             ): Boolean {
-                resource?.let { it ->
-                    val palette = Palette.from(it.toBitmap()).generate()
+                resource?.let { bitmap ->
+                    val palette = Palette.from(bitmap.toBitmap()).generate()
                     val swatch = palette.dominantSwatch
                     swatch?.rgb?.let {
                         listener(it)
@@ -173,3 +175,14 @@ private fun Int.getTypeById(): PokeCollec =
         2 -> PokeCollec.PLUSH
         else -> PokeCollec.OTHER
     }
+
+fun Context.errorToString(error: Error) = when (error) {
+    Error.Connectivity -> getString(R.string.error_conectivity)
+    Error.Server -> getString(R.string.error_server)
+    Error.File -> getString(R.string.error_file)
+    Error.Unknown -> getString(R.string.error_unknown)
+}
+
+fun showSnackbar(view: View, message: String) {
+    Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
+}

@@ -5,6 +5,8 @@ import com.architect.coders.pokedex.common.id
 import com.architect.coders.pokedex.database.*
 import com.architect.coders.pokedex.datasource.PokemonLocalDataSource
 import com.architect.coders.pokedex.datasource.PokemonRemoteDataSource
+import com.architect.coders.pokedex.model.Error
+import com.architect.coders.pokedex.model.tryCall
 import com.architect.coders.pokedex.network.PokemonDetailR
 import com.architect.coders.pokedex.network.PokemonItemR
 import com.architect.coders.pokedex.network.StatR
@@ -20,7 +22,7 @@ class PokemonRepository(application: App) {
 
     val pokemonList = localDataSource.pokemonList
 
-    suspend fun checkRequierePokemonData(lastVisible: Int) {
+    suspend fun checkRequierePokemonData(lastVisible: Int): Error? = tryCall {
         val size = localDataSource.size()
 
         if (lastVisible >= size - PAGE_THRESHOLD) {
@@ -31,7 +33,7 @@ class PokemonRepository(application: App) {
 
     fun getPokemonDetail(pokemonID: Int): Flow<PokemonDetailL> = localDataSource.findById(pokemonID)
 
-    suspend fun checkPokemonDetail(pokemonID: Int) {
+    suspend fun checkPokemonDetail(pokemonID: Int): Error? = tryCall {
         if (localDataSource.isEmpty(pokemonID)) {
             val pokemonDetail = remoteDataSource.getPokemonDetail(pokemonID)
             savePokemonDetail(pokemonDetail)
@@ -45,14 +47,14 @@ class PokemonRepository(application: App) {
         localDataSource.update(pokemonDetail.toLocalModel())
     }
 
-    suspend fun switchFavorite(pokemon: PokemonL) {
+    suspend fun switchFavorite(pokemon: PokemonL): Error? = tryCall {
         val updatePokemon = pokemon.copy(favorite = !pokemon.favorite)
         localDataSource.update(updatePokemon)
     }
 
     fun getCollectionByPokemon(pokemonID: Int): Flow<List<CollectionL>> = localDataSource.getCollectionById(pokemonID)
 
-    suspend fun saveCollectionByPokemon(collection: CollectionL) {
+    suspend fun saveCollectionByPokemon(collection: CollectionL): Error? = tryCall {
         localDataSource.saveCollection(collection)
     }
 

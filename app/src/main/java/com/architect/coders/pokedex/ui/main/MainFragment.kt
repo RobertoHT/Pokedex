@@ -34,6 +34,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         with(viewModel.state) {
             launchCollectAndDiff(this, {it.loading}) { binding.progress.visible = it }
             launchCollectAndDiff(this, {it.pokemonList}) { adapter.submitList(it) }
+            launchCollectAndDiff(this, {it.error}) { it?.let {
+                showSnackbar(binding.containerMain, requireContext().errorToString(it)) } }
         }
 
         viewLifecycleOwner.lifecycleScope.collectFlow(binding.recycler.lastVisibleEvents) {

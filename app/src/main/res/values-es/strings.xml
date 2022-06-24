@@ -1,0 +1,11 @@
+<resources>
+    <string name="detail_base_stats">Estadísticas básicas:</string>
+    <string name="btn_my_collection">Mi colección</string>
+    <string name="gallery_amiibo">amiibo</string>
+    <string name="gallery_plush">Peluche</string>
+    <string name="gallery_other">Otro</string>
+    <string name="error_conectivity">Ha ocurrido una intermitencia en la comunicación, favor de intentarlo mas tarde</string>
+    <string name="error_server">Los servicios no se encuentran disponibles, favor de intentarlo mas tarde</string>
+    <string name="error_file">Por el momento no se puede acceder al archivo</string>
+    <string name="error_unknown">Ocurrió un evento inesperado</string>
+</resources>

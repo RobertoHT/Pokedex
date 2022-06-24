@@ -28,7 +28,7 @@ interface PokemonDAO {
     suspend fun insertStats(stats: List<StatL>)
 
     @Transaction
-    @Query("SELECT * FROM pokemon WHERE id = :id")
+    @Query("SELECT * FROM pokemon WHERE id = :id AND weight != 0 AND height != 0")
     fun findPokemonByID(id: Int): Flow<PokemonDetailL>
 
     @Query("SELECT * FROM collection WHERE pokemonID = :id")

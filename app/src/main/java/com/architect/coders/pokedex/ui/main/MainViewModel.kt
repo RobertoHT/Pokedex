@@ -3,10 +3,9 @@ package com.architect.coders.pokedex.ui.main
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.database.PokemonL
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
+import com.architect.coders.pokedex.model.Error
+import com.architect.coders.pokedex.model.toError
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel() {
@@ -17,9 +16,9 @@ class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel
     init {
         viewModelScope.launch {
             refresh()
-            pokemoRepository.pokemonList.collect { pokemonList ->
-                _state.value = UIState(pokemonList = pokemonList)
-            }
+            pokemoRepository.pokemonList
+                .catch { cause -> _state.update { it.copy(error = cause.toError()) } }
+                .collect { pokemonList -> _state.update { UIState(pokemonList = pokemonList) } }
         }
     }
 
@@ -29,12 +28,14 @@ class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel
     }
 
     suspend fun notifyLastVisible(lastVisible: Int) {
-        pokemoRepository.checkRequierePokemonData(lastVisible)
+        val cause = pokemoRepository.checkRequierePokemonData(lastVisible)
+        _state.update { it.copy(error = cause) }
     }
 
     data class UIState(
         val loading: Boolean = false,
-        val pokemonList: List<PokemonL>? = null
+        val pokemonList: List<PokemonL>? = null,
+        val error: Error? = null
     )
 }
 
