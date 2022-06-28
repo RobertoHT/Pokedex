@@ -6,8 +6,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.common.*
-import com.architect.coders.pokedex.database.PokemonL
+import com.architect.coders.pokedex.ui.common.*
+import com.architect.coders.pokedex.data.database.PokemonL
 import com.architect.coders.pokedex.databinding.PokemonItemBinding
 
 class PokemonAdapter(private val pokemonClickListener: (PokemonL, colorSwatch: Int) -> Unit) :
@@ -22,8 +22,10 @@ class PokemonAdapter(private val pokemonClickListener: (PokemonL, colorSwatch: I
         holder.bind(getItem(position))
     }
 
-    class ViewHolder(private val binding: PokemonItemBinding, private val pokemonClickListener: (PokemonL, colorSwatch: Int) -> Unit)
-        : RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder(
+        private val binding: PokemonItemBinding,
+        private val pokemonClickListener: (PokemonL, colorSwatch: Int) -> Unit
+    ) : RecyclerView.ViewHolder(binding.root) {
 
         private var colorPokemon = R.color.white
 

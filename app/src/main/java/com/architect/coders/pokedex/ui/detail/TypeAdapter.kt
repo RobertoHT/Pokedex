@@ -3,9 +3,9 @@ package com.architect.coders.pokedex.ui.detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.architect.coders.pokedex.database.TypeL
+import com.architect.coders.pokedex.data.database.TypeL
 import com.architect.coders.pokedex.databinding.TypeItemBinding
-import com.architect.coders.pokedex.util.getTypePokemonColor
+import com.architect.coders.pokedex.ui.common.getTypePokemonColor
 
 class TypeAdapter(private val types: List<TypeL>) : RecyclerView.Adapter<TypeAdapter.ViewHolder>() {
 

@@ -3,15 +3,15 @@ package com.architect.coders.pokedex.ui.gallery
 import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.*
-import com.architect.coders.pokedex.common.PokeCollec
-import com.architect.coders.pokedex.common.toGalleryItem
+import com.architect.coders.pokedex.data.Error
+import com.architect.coders.pokedex.ui.common.PokeCollec
+import com.architect.coders.pokedex.ui.common.toGalleryItem
 import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.database.CollectionL
+import com.architect.coders.pokedex.data.database.CollectionL
 import com.architect.coders.pokedex.data.FileRepository
-import com.architect.coders.pokedex.model.Error
+import com.architect.coders.pokedex.data.toError
 import com.architect.coders.pokedex.model.GalleryItem
-import com.architect.coders.pokedex.model.toError
-import com.architect.coders.pokedex.util.getCollection
+import com.architect.coders.pokedex.ui.common.getCollection
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

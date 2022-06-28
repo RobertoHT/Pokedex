@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.architect.coders.pokedex.common.basicDiffUtil
+import com.architect.coders.pokedex.ui.common.basicDiffUtil
 import com.architect.coders.pokedex.databinding.GalleryItemBinding
 import com.architect.coders.pokedex.model.GalleryItem
-import com.architect.coders.pokedex.common.setCollectionTitle
+import com.architect.coders.pokedex.ui.common.setCollectionTitle
 
 class GalleryAdapter(private val collectionClickListener: (String) -> Unit) :
     ListAdapter<GalleryItem, GalleryAdapter.ViewHolder>(

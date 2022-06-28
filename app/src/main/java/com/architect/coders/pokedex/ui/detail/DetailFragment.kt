@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.common.*
+import com.architect.coders.pokedex.ui.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.database.PokemonDetailL
+import com.architect.coders.pokedex.data.database.PokemonDetailL
 import com.architect.coders.pokedex.databinding.FragmentDetailBinding
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {

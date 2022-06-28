@@ -7,9 +7,6 @@ import androidx.core.content.FileProvider
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.architect.coders.pokedex.model.Error
-import com.architect.coders.pokedex.model.toError
-import com.architect.coders.pokedex.model.tryCall
 import java.io.File
 
 class FileRepository(private val application: Application) {

@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.common
+package com.architect.coders.pokedex.ui.common
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -16,12 +16,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.App
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.database.CollectionL
-import com.architect.coders.pokedex.database.PokemonL
-import com.architect.coders.pokedex.model.Error
+import com.architect.coders.pokedex.data.database.CollectionL
+import com.architect.coders.pokedex.data.database.PokemonL
 import com.architect.coders.pokedex.model.GalleryItem
-import com.architect.coders.pokedex.network.PokemonDetailR
-import com.architect.coders.pokedex.network.PokemonItemR
+import com.architect.coders.pokedex.data.network.PokemonItemR
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -33,6 +31,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import com.architect.coders.pokedex.data.Error
 
 private const val URL_SPRITE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
 
@@ -51,9 +50,6 @@ fun PokemonItemR.id() : Int {
 }
 
 fun PokemonL.imageUrl() : String =
-    String.format(URL_SPRITE, id)
-
-fun PokemonDetailR.imageUrl() : String =
     String.format(URL_SPRITE, id)
 
 fun TextView.setCollectionTitle(type: PokeCollec) {
@@ -176,7 +172,7 @@ private fun Int.getTypeById(): PokeCollec =
         else -> PokeCollec.OTHER
     }
 
-fun Context.errorToString(error: Error) = when (error) {
+fun Context.errorToString(error: Error): String = when (error) {
     Error.Connectivity -> getString(R.string.error_conectivity)
     Error.Server -> getString(R.string.error_server)
     Error.File -> getString(R.string.error_file)

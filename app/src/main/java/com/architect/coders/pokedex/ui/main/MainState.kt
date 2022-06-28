@@ -4,7 +4,7 @@ import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.architect.coders.pokedex.database.PokemonL
+import com.architect.coders.pokedex.data.database.PokemonL
 
 fun Fragment.buildMainState(
     navController: NavController = findNavController()

@@ -1,10 +1,10 @@
 package com.architect.coders.pokedex.ui.detail
 
 import androidx.lifecycle.*
+import com.architect.coders.pokedex.data.Error
 import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.database.PokemonDetailL
-import com.architect.coders.pokedex.model.Error
-import com.architect.coders.pokedex.model.toError
+import com.architect.coders.pokedex.data.database.PokemonDetailL
+import com.architect.coders.pokedex.data.toError
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

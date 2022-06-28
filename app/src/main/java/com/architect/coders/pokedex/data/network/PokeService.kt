@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.network
+package com.architect.coders.pokedex.data.network
 
 import retrofit2.http.GET
 import retrofit2.http.Path

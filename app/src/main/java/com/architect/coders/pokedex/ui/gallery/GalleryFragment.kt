@@ -7,14 +7,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.common.app
-import com.architect.coders.pokedex.common.errorToString
-import com.architect.coders.pokedex.common.launchCollectAndDiff
-import com.architect.coders.pokedex.common.showSnackbar
+import com.architect.coders.pokedex.ui.common.app
+import com.architect.coders.pokedex.ui.common.errorToString
+import com.architect.coders.pokedex.ui.common.launchCollectAndDiff
+import com.architect.coders.pokedex.ui.common.showSnackbar
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentGalleryBinding
 import com.architect.coders.pokedex.data.FileRepository
-import com.google.android.material.snackbar.Snackbar
 
 class GalleryFragment : Fragment(R.layout.fragment_gallery) {
 

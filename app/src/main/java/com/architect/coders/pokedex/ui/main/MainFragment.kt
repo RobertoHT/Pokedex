@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.common.*
+import com.architect.coders.pokedex.ui.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentMainBinding
 import kotlinx.coroutines.ExperimentalCoroutinesApi

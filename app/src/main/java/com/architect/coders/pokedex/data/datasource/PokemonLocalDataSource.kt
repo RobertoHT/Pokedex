@@ -1,6 +1,6 @@
-package com.architect.coders.pokedex.datasource
+package com.architect.coders.pokedex.data.datasource
 
-import com.architect.coders.pokedex.database.*
+import com.architect.coders.pokedex.data.database.*
 import kotlinx.coroutines.flow.Flow
 
 class PokemonLocalDataSource(private val pokemonDao: PokemonDAO) {

@@ -5,20 +5,20 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.architect.coders.pokedex.model.DispatchPicture
+import com.architect.coders.pokedex.ui.common.PictureRequester
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 fun Fragment.buildGalleryState(
     scope: CoroutineScope = viewLifecycleOwner.lifecycleScope,
     navController: NavController = findNavController(),
-    dispatchPicture: DispatchPicture = DispatchPicture(this)
+    dispatchPicture: PictureRequester = PictureRequester(this)
 ) = GalleryState(scope, navController, dispatchPicture)
 
 class GalleryState(
     private val scope: CoroutineScope,
     private val navController: NavController,
-    private val dispatchPicture: DispatchPicture
+    private val dispatchPicture: PictureRequester
 ) {
 
     fun onImageClicked(imageSrc: String) {

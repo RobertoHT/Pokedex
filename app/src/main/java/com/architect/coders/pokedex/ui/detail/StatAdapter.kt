@@ -3,10 +3,10 @@ package com.architect.coders.pokedex.ui.detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.architect.coders.pokedex.database.StatL
+import com.architect.coders.pokedex.data.database.StatL
 import com.architect.coders.pokedex.databinding.StatItemBinding
-import com.architect.coders.pokedex.util.getStatPokemonColor
-import com.architect.coders.pokedex.util.getStatPokemonText
+import com.architect.coders.pokedex.ui.common.getStatPokemonColor
+import com.architect.coders.pokedex.ui.common.getStatPokemonText
 
 class StatAdapter(private val stats: List<StatL>) : RecyclerView.Adapter<StatAdapter.ViewHolder>() {
 

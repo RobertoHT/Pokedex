@@ -1,16 +1,14 @@
 package com.architect.coders.pokedex.data
 
 import com.architect.coders.pokedex.App
-import com.architect.coders.pokedex.common.id
-import com.architect.coders.pokedex.database.*
-import com.architect.coders.pokedex.datasource.PokemonLocalDataSource
-import com.architect.coders.pokedex.datasource.PokemonRemoteDataSource
-import com.architect.coders.pokedex.model.Error
-import com.architect.coders.pokedex.model.tryCall
-import com.architect.coders.pokedex.network.PokemonDetailR
-import com.architect.coders.pokedex.network.PokemonItemR
-import com.architect.coders.pokedex.network.StatR
-import com.architect.coders.pokedex.network.TypeR
+import com.architect.coders.pokedex.ui.common.id
+import com.architect.coders.pokedex.data.database.*
+import com.architect.coders.pokedex.data.datasource.PokemonLocalDataSource
+import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource
+import com.architect.coders.pokedex.data.network.PokemonDetailR
+import com.architect.coders.pokedex.data.network.PokemonItemR
+import com.architect.coders.pokedex.data.network.StatR
+import com.architect.coders.pokedex.data.network.TypeR
 import kotlinx.coroutines.flow.Flow
 
 private const val PAGE_THRESHOLD = 6

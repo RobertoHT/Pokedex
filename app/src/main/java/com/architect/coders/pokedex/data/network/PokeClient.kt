@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.network
+package com.architect.coders.pokedex.data.network
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

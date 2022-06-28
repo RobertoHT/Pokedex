@@ -9,7 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.common.loadWithPathWithoutPlaceHolder
+import com.architect.coders.pokedex.ui.common.loadWithPathWithoutPlaceHolder
 import com.architect.coders.pokedex.databinding.FragmentCollectionBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

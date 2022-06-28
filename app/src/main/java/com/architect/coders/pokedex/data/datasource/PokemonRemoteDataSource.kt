@@ -1,6 +1,6 @@
-package com.architect.coders.pokedex.datasource
+package com.architect.coders.pokedex.data.datasource
 
-import com.architect.coders.pokedex.network.PokeClient
+import com.architect.coders.pokedex.data.network.PokeClient
 
 class PokemonRemoteDataSource {
 

@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.util
+package com.architect.coders.pokedex.ui.collection
 
 import android.content.Context
 import android.graphics.Matrix

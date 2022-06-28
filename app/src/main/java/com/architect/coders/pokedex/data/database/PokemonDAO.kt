@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.database
+package com.architect.coders.pokedex.data.database
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +31,7 @@ interface PokemonDAO {
     @Query("SELECT * FROM pokemon WHERE id = :id AND weight != 0 AND height != 0")
     fun findPokemonByID(id: Int): Flow<PokemonDetailL>
 
-    @Query("SELECT * FROM collection WHERE pokemonID = :id")
+    @Query("SELECT * FROM collection WHERE pokemonID = :id ORDER BY type")
     fun getAllCollectionByPokemon(id: Int): Flow<List<CollectionL>>
 
     @Insert
