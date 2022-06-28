@@ -2,14 +2,18 @@ package com.architect.coders.pokedex.ui.detail
 
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.Error
-import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.data.database.PokemonDetailL
 import com.architect.coders.pokedex.data.toError
+import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
+import com.architect.coders.pokedex.usecases.FindPokemonUseCase
+import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
-    private val pokemonRepository: PokemonRepository,
+    private val checkPokemonUseCase: CheckPokemonUseCase,
+    private val findPokemonUseCase: FindPokemonUseCase,
+    private val switchPokemonFavoriteUseCase: SwitchPokemonFavoriteUseCase,
     val pokemonID: Int,
     private val colorSwatch: Int
 ) : ViewModel() {
@@ -21,10 +25,10 @@ class DetailViewModel(
         viewModelScope.launch {
             _state.value = UIState(loading = true)
 
-            val cause = pokemonRepository.checkPokemonDetail(pokemonID)
+            val cause = checkPokemonUseCase(pokemonID)
             _state.update { it.copy(error = cause) }
 
-            pokemonRepository.getPokemonDetail(pokemonID)
+            findPokemonUseCase(pokemonID)
                 .catch { error -> _state.update { it.copy(error = error.toError()) } }
                 .collect { updateState(it) }
         }
@@ -41,7 +45,7 @@ class DetailViewModel(
     fun onFavoriteClicked() {
         viewModelScope.launch {
             _state.value.pokemon?.let { detail ->
-                val cause = pokemonRepository.switchFavorite(detail.pokemon)
+                val cause = switchPokemonFavoriteUseCase(detail.pokemon)
                 _state.update { it.copy(error = cause) }
             }
         }
@@ -58,11 +62,13 @@ class DetailViewModel(
 
 @Suppress("UNCHECKED_CAST")
 class DetailViewModelFactory(
-    private val pokemoRepository: PokemonRepository,
+    private val checkPokemonUseCase: CheckPokemonUseCase,
+    private val findPokemonUseCase: FindPokemonUseCase,
+    private val switchPokemonFavoriteUseCase: SwitchPokemonFavoriteUseCase,
     private val pokemonID: Int,
     private val colorSwatch: Int
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetailViewModel(pokemoRepository ,pokemonID, colorSwatch) as T
+        return DetailViewModel(checkPokemonUseCase, findPokemonUseCase, switchPokemonFavoriteUseCase ,pokemonID, colorSwatch) as T
     }
 }

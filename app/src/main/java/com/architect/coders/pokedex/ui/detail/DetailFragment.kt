@@ -10,14 +10,21 @@ import com.architect.coders.pokedex.ui.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.data.database.PokemonDetailL
 import com.architect.coders.pokedex.databinding.FragmentDetailBinding
+import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
+import com.architect.coders.pokedex.usecases.FindPokemonUseCase
+import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase
 
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
-    private val viewModel: DetailViewModel by viewModels { DetailViewModelFactory(
-        PokemonRepository(requireActivity().app),
-        safeArgs.id,
-        safeArgs.colorSwatch)
+    private val viewModel: DetailViewModel by viewModels {
+        val repository = PokemonRepository(requireActivity().app)
+        DetailViewModelFactory(
+            CheckPokemonUseCase(repository),
+            FindPokemonUseCase(repository),
+            SwitchPokemonFavoriteUseCase(repository),
+            safeArgs.id,
+            safeArgs.colorSwatch)
     }
 
     private lateinit var detailState: DetailState

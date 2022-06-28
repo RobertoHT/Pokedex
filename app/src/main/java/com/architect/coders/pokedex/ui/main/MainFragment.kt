@@ -10,12 +10,16 @@ import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.ui.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentMainBinding
+import com.architect.coders.pokedex.usecases.GetPokemonUseCase
+import com.architect.coders.pokedex.usecases.RequestPokemonUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MainFragment : Fragment(R.layout.fragment_main) {
 
-    private val viewModel: MainViewModel by viewModels { MainViewModelFactory(PokemonRepository(requireActivity().app)) }
+    private val viewModel: MainViewModel by viewModels {
+        val repository = PokemonRepository(requireActivity().app)
+        MainViewModelFactory(GetPokemonUseCase(repository), RequestPokemonUseCase(repository)) }
     private val adapter = PokemonAdapter { pokemon, color -> mainState.onPokemonClicked(pokemon, color) }
 
     private lateinit var mainState: MainState
