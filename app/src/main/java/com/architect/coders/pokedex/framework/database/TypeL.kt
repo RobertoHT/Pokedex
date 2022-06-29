@@ -1,12 +1,11 @@
-package com.architect.coders.pokedex.data.database
+package com.architect.coders.pokedex.framework.database
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "stat")
-data class StatL(
+@Entity(tableName = "type")
+data class TypeL(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val pokemonID: Int,
-    val name: String,
-    val baseStat: Int
+    val name: String
 )

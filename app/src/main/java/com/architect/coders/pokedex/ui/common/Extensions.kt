@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.App
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.data.network.PokemonItemR
+import com.architect.coders.pokedex.framework.network.PokemonItemR
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException

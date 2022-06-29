@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.data.database
+package com.architect.coders.pokedex.framework.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

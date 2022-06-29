@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.data
+package com.architect.coders.pokedex.framework
 
 import android.app.Application
 import android.net.Uri
@@ -7,13 +7,17 @@ import androidx.core.content.FileProvider
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import com.architect.coders.pokedex.data.Error
+import com.architect.coders.pokedex.data.PhotoRepository
+import com.architect.coders.pokedex.data.toError
+import com.architect.coders.pokedex.data.tryCall
 import java.io.File
 
-class FileRepository(private val application: Application) {
+class FileRepository(private val application: Application) : PhotoRepository {
 
-    val path: String = getStorageDir()?.absolutePath!!
+    override val path: String = getStorageDir()?.absolutePath!!
 
-    fun createFile(nameFile: String): Either<Error, Uri> = try {
+    override fun createFile(nameFile: String): Either<Error, Uri> = try {
         val file = File.createTempFile(
             nameFile,
             ".jpg",
@@ -29,7 +33,7 @@ class FileRepository(private val application: Application) {
         e.toError().left()
     }
 
-    fun deleteImageFile(fileName: String): Error? = tryCall {
+    override fun deleteImageFile(fileName: String): Error? = tryCall {
         val filePath = "$path/$fileName"
         val fileTemp = File(filePath)
         fileTemp.delete()

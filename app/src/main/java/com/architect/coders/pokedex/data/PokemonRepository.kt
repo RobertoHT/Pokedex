@@ -5,14 +5,16 @@ import com.architect.coders.pokedex.data.datasource.PokemonLocalDataSource
 import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource
 import com.architect.coders.pokedex.domain.GalleryItem
 import com.architect.coders.pokedex.domain.Pokemon
+import com.architect.coders.pokedex.framework.datasource.PokemonRoomDataSource
+import com.architect.coders.pokedex.framework.datasource.PokemonServerDataSource
 import kotlinx.coroutines.flow.Flow
 
 private const val PAGE_THRESHOLD = 6
 
 class PokemonRepository(application: App) {
 
-    private val localDataSource = PokemonLocalDataSource(application.db.pokemonDao())
-    private val remoteDataSource = PokemonRemoteDataSource()
+    private val localDataSource: PokemonLocalDataSource = PokemonRoomDataSource(application.db.pokemonDao())
+    private val remoteDataSource: PokemonRemoteDataSource = PokemonServerDataSource()
 
     val pokemonList = localDataSource.pokemonList
 

@@ -7,13 +7,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
+import com.architect.coders.pokedex.data.PhotoRepository
 import com.architect.coders.pokedex.ui.common.app
 import com.architect.coders.pokedex.ui.common.errorToString
 import com.architect.coders.pokedex.ui.common.launchCollectAndDiff
 import com.architect.coders.pokedex.ui.common.showSnackbar
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentGalleryBinding
-import com.architect.coders.pokedex.data.FileRepository
+import com.architect.coders.pokedex.framework.FileRepository
 import com.architect.coders.pokedex.usecases.*
 
 class GalleryFragment : Fragment(R.layout.fragment_gallery) {
@@ -21,14 +22,14 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery) {
     private val safeArgs: GalleryFragmentArgs by navArgs()
     private val viewModel: GalleryViewModel by viewModels {
         val pokemonRepository = PokemonRepository(requireActivity().app)
-        val fileRepository = FileRepository(requireActivity().application)
+        val photoRepository: PhotoRepository = FileRepository(requireActivity().application)
         GalleryViewModelFactory(
             safeArgs.id,
             FindCollectionsUseCase(pokemonRepository),
             SaveCollectionUseCase(pokemonRepository),
-            GetPathUseCase(fileRepository),
-            CreatePhotoUseCase(fileRepository),
-            DeletePhotoUseCase(fileRepository))
+            GetPathUseCase(photoRepository),
+            CreatePhotoUseCase(photoRepository),
+            DeletePhotoUseCase(photoRepository))
     }
 
     private lateinit var galleryState: GalleryState

@@ -1,8 +1,8 @@
 package com.architect.coders.pokedex.usecases
 
 import com.architect.coders.pokedex.data.Error
-import com.architect.coders.pokedex.data.FileRepository
+import com.architect.coders.pokedex.data.PhotoRepository
 
-class DeletePhotoUseCase(private val fileRepository: FileRepository) {
-    operator fun invoke(name: String): Error? = fileRepository.deleteImageFile(name)
+class DeletePhotoUseCase(private val photoRepository: PhotoRepository) {
+    operator fun invoke(name: String): Error? = photoRepository.deleteImageFile(name)
 }
