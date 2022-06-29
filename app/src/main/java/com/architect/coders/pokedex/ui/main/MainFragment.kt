@@ -10,8 +10,8 @@ import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.ui.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentMainBinding
-import com.architect.coders.pokedex.framework.datasource.PokemonRoomDataSource
-import com.architect.coders.pokedex.framework.datasource.PokemonServerDataSource
+import com.architect.coders.pokedex.framework.database.PokemonRoomDataSource
+import com.architect.coders.pokedex.framework.network.PokemonServerDataSource
 import com.architect.coders.pokedex.usecases.GetPokemonUseCase
 import com.architect.coders.pokedex.usecases.RequestPokemonUseCase
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -1,7 +1,6 @@
-package com.architect.coders.pokedex.framework.datasource
+package com.architect.coders.pokedex.framework.database
 
 import com.architect.coders.pokedex.data.datasource.PokemonLocalDataSource
-import com.architect.coders.pokedex.framework.database.*
 import com.architect.coders.pokedex.domain.GalleryItem
 import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.domain.Stat

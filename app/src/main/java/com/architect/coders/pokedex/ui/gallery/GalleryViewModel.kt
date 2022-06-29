@@ -3,10 +3,10 @@ package com.architect.coders.pokedex.ui.gallery
 import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.*
-import com.architect.coders.pokedex.data.Error
 import com.architect.coders.pokedex.ui.common.PokeCollec
-import com.architect.coders.pokedex.data.toError
+import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.GalleryItem
+import com.architect.coders.pokedex.domain.toError
 import com.architect.coders.pokedex.ui.common.getCollection
 import com.architect.coders.pokedex.usecases.*
 import kotlinx.coroutines.flow.*

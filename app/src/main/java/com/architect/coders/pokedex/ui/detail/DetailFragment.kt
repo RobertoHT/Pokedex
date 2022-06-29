@@ -10,8 +10,8 @@ import com.architect.coders.pokedex.ui.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentDetailBinding
 import com.architect.coders.pokedex.domain.Pokemon
-import com.architect.coders.pokedex.framework.datasource.PokemonRoomDataSource
-import com.architect.coders.pokedex.framework.datasource.PokemonServerDataSource
+import com.architect.coders.pokedex.framework.database.PokemonRoomDataSource
+import com.architect.coders.pokedex.framework.network.PokemonServerDataSource
 import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
 import com.architect.coders.pokedex.usecases.FindPokemonUseCase
 import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase

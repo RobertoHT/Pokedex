@@ -1,7 +1,6 @@
-package com.architect.coders.pokedex.framework.datasource
+package com.architect.coders.pokedex.framework.network
 
 import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource
-import com.architect.coders.pokedex.framework.network.*
 import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.domain.Stat
 import com.architect.coders.pokedex.domain.Type

@@ -1,9 +1,9 @@
 package com.architect.coders.pokedex.ui.main
 
 import androidx.lifecycle.*
-import com.architect.coders.pokedex.data.Error
-import com.architect.coders.pokedex.data.toError
+import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.Pokemon
+import com.architect.coders.pokedex.domain.toError
 import com.architect.coders.pokedex.usecases.GetPokemonUseCase
 import com.architect.coders.pokedex.usecases.RequestPokemonUseCase
 import kotlinx.coroutines.flow.*

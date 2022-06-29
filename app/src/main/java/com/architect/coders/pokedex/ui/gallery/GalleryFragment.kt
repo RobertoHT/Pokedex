@@ -15,8 +15,8 @@ import com.architect.coders.pokedex.ui.common.showSnackbar
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentGalleryBinding
 import com.architect.coders.pokedex.framework.FileRepository
-import com.architect.coders.pokedex.framework.datasource.PokemonRoomDataSource
-import com.architect.coders.pokedex.framework.datasource.PokemonServerDataSource
+import com.architect.coders.pokedex.framework.database.PokemonRoomDataSource
+import com.architect.coders.pokedex.framework.network.PokemonServerDataSource
 import com.architect.coders.pokedex.usecases.*
 
 class GalleryFragment : Fragment(R.layout.fragment_gallery) {

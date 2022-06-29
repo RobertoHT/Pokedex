@@ -7,10 +7,10 @@ import androidx.core.content.FileProvider
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.architect.coders.pokedex.data.Error
 import com.architect.coders.pokedex.data.PhotoRepository
-import com.architect.coders.pokedex.data.toError
-import com.architect.coders.pokedex.data.tryCall
+import com.architect.coders.pokedex.domain.Error
+import com.architect.coders.pokedex.domain.toError
+import com.architect.coders.pokedex.domain.tryCall
 import java.io.File
 
 class FileRepository(private val application: Application) : PhotoRepository {

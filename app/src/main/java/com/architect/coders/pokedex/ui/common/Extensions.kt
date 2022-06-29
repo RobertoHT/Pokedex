@@ -28,7 +28,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import com.architect.coders.pokedex.data.Error
+import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.Pokemon
 
 private const val URL_SPRITE =

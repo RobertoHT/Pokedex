@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.data
+package com.architect.coders.pokedex.domain
 
 import retrofit2.HttpException
 import java.io.FileNotFoundException
