@@ -1,14 +1,10 @@
 package com.architect.coders.pokedex.data
 
 import com.architect.coders.pokedex.App
-import com.architect.coders.pokedex.ui.common.id
-import com.architect.coders.pokedex.data.database.*
 import com.architect.coders.pokedex.data.datasource.PokemonLocalDataSource
 import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource
-import com.architect.coders.pokedex.data.network.PokemonDetailR
-import com.architect.coders.pokedex.data.network.PokemonItemR
-import com.architect.coders.pokedex.data.network.StatR
-import com.architect.coders.pokedex.data.network.TypeR
+import com.architect.coders.pokedex.domain.GalleryItem
+import com.architect.coders.pokedex.domain.Pokemon
 import kotlinx.coroutines.flow.Flow
 
 private const val PAGE_THRESHOLD = 6
@@ -24,12 +20,12 @@ class PokemonRepository(application: App) {
         val size = localDataSource.size()
 
         if (lastVisible >= size - PAGE_THRESHOLD) {
-            val pokemon = remoteDataSource.getPokemonList(size)
-            localDataSource.save(pokemon.pokemonItems.toLocalModel())
+            val pokemonList = remoteDataSource.getPokemonList(size)
+            localDataSource.save(pokemonList)
         }
     }
 
-    fun getPokemonDetail(pokemonID: Int): Flow<PokemonDetailL> = localDataSource.findById(pokemonID)
+    fun getPokemonDetail(pokemonID: Int): Flow<Pokemon> = localDataSource.findById(pokemonID)
 
     suspend fun checkPokemonDetail(pokemonID: Int): Error? = tryCall {
         if (localDataSource.isEmpty(pokemonID)) {
@@ -38,42 +34,22 @@ class PokemonRepository(application: App) {
         }
     }
 
-    private suspend fun savePokemonDetail(pokemonDetail: PokemonDetailR) {
-        val id = pokemonDetail.id
-        localDataSource.saveTypes(pokemonDetail.types.toTypeLocalModel(id))
-        localDataSource.saveStats(pokemonDetail.stats.toStatLocalModel(id))
-        localDataSource.update(pokemonDetail.toLocalModel())
+    private suspend fun savePokemonDetail(pokemon: Pokemon) {
+        val id = pokemon.id
+        localDataSource.saveTypes(id, pokemon.types)
+        localDataSource.saveStats(id, pokemon.stats)
+        localDataSource.update(pokemon)
     }
 
-    suspend fun switchFavorite(pokemon: PokemonL): Error? = tryCall {
+    suspend fun switchFavorite(pokemon: Pokemon): Error? = tryCall {
         val updatePokemon = pokemon.copy(favorite = !pokemon.favorite)
         localDataSource.update(updatePokemon)
     }
 
-    fun getCollectionByPokemon(pokemonID: Int): Flow<List<CollectionL>> = localDataSource.getCollectionById(pokemonID)
+    fun getCollectionByPokemon(pokemonID: Int, path: String): Flow<List<GalleryItem>> =
+        localDataSource.getCollectionById(pokemonID, path)
 
-    suspend fun saveCollectionByPokemon(collection: CollectionL): Error? = tryCall {
-        localDataSource.saveCollection(collection)
+    suspend fun saveCollectionByPokemon(id: Int, type: Int, image: String): Error? = tryCall {
+        localDataSource.saveCollection(id, type, image)
     }
-
-    private fun List<PokemonItemR>.toLocalModel(): List<PokemonL> = map { it.toLocalModel() }
-
-    private fun PokemonItemR.toLocalModel(): PokemonL = PokemonL(id(), name, 0, 0, false)
-
-    private fun PokemonDetailR.toLocalModel(): PokemonL = PokemonL(id, name, weight, height, false)
-
-    private fun List<TypeR>.toTypeLocalModel(id: Int): List<TypeL> = map { it.toLocalModel(id) }
-
-    private fun TypeR.toLocalModel(id: Int): TypeL = TypeL(
-        pokemonID = id,
-        name = type.name
-    )
-
-    private fun List<StatR>.toStatLocalModel(id: Int): List<StatL> = map { it.toLocalModel(id) }
-
-    private fun StatR.toLocalModel(id: Int): StatL = StatL(
-        pokemonID = id,
-        name = stat.name,
-        baseStat = baseStat
-    )
 }

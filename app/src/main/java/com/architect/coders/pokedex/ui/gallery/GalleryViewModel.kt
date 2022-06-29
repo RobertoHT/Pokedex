@@ -5,10 +5,8 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.Error
 import com.architect.coders.pokedex.ui.common.PokeCollec
-import com.architect.coders.pokedex.ui.common.toGalleryItem
-import com.architect.coders.pokedex.data.database.CollectionL
 import com.architect.coders.pokedex.data.toError
-import com.architect.coders.pokedex.model.GalleryItem
+import com.architect.coders.pokedex.domain.GalleryItem
 import com.architect.coders.pokedex.ui.common.getCollection
 import com.architect.coders.pokedex.usecases.*
 import kotlinx.coroutines.flow.*
@@ -28,10 +26,10 @@ class GalleryViewModel(
 
     init {
         viewModelScope.launch {
-            findCollectionsUseCase(pokemonID)
+            findCollectionsUseCase(pokemonID, getPathUseCase())
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) } }
                 .collect { collectionList ->
-                    _state.update { it.copy(colletionList = collectionList.toGalleryItem(getPathUseCase())) }
+                    _state.update { it.copy(colletionList = collectionList) }
             }
         }
     }
@@ -48,8 +46,7 @@ class GalleryViewModel(
     fun onPictureReady(result: Boolean) {
         if (result) {
             viewModelScope.launch {
-                val cause = saveCollectionUseCase(
-                    CollectionL(0, pokemonID, _state.value.type!!.id, _state.value.nameImage!!))
+                val cause = saveCollectionUseCase(pokemonID, _state.value.type!!.id, _state.value.nameImage!!)
                 _state.update { it.copy(error = cause) }
                 onTakePictureDone()
             }

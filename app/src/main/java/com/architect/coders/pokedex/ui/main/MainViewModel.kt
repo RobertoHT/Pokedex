@@ -2,8 +2,8 @@ package com.architect.coders.pokedex.ui.main
 
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.Error
-import com.architect.coders.pokedex.data.database.PokemonL
 import com.architect.coders.pokedex.data.toError
+import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.usecases.GetPokemonUseCase
 import com.architect.coders.pokedex.usecases.RequestPokemonUseCase
 import kotlinx.coroutines.flow.*
@@ -38,7 +38,7 @@ class MainViewModel(
 
     data class UIState(
         val loading: Boolean = false,
-        val pokemonList: List<PokemonL>? = null,
+        val pokemonList: List<Pokemon>? = null,
         val error: Error? = null
     )
 }

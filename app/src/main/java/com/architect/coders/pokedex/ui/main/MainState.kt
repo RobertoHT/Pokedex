@@ -4,7 +4,7 @@ import androidx.annotation.ColorInt
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import com.architect.coders.pokedex.data.database.PokemonL
+import com.architect.coders.pokedex.domain.Pokemon
 
 fun Fragment.buildMainState(
     navController: NavController = findNavController()
@@ -14,7 +14,7 @@ class MainState(
     private val navController: NavController
 ) {
 
-    fun onPokemonClicked(pokemon: PokemonL, @ColorInt color: Int) {
+    fun onPokemonClicked(pokemon: Pokemon, @ColorInt color: Int) {
         val action = MainFragmentDirections.actionMainToDetail(pokemon.id, color)
         navController.navigate(action)
     }

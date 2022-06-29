@@ -8,8 +8,8 @@ import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.ui.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.data.database.PokemonDetailL
 import com.architect.coders.pokedex.databinding.FragmentDetailBinding
+import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
 import com.architect.coders.pokedex.usecases.FindPokemonUseCase
 import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase
@@ -61,14 +61,14 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
         }
     }
 
-    private fun FragmentDetailBinding.setupDataInViews(detail: PokemonDetailL) {
-        nameDetail.text = detail.pokemon.name
-        weightDetail.text = getString(R.string.detail_weight, detail.pokemon.weight)
-        heightDetail.text = getString(R.string.detail_height, detail.pokemon.height)
+    private fun FragmentDetailBinding.setupDataInViews(detail: Pokemon) {
+        nameDetail.text = detail.name
+        weightDetail.text = getString(R.string.detail_weight, detail.weight)
+        heightDetail.text = getString(R.string.detail_height, detail.height)
 
-        imageDetail.loadWithPath(detail.pokemon.imageUrl())
+        imageDetail.loadWithPath(detail.imageUrl())
 
-        val idDrawable = if (detail.pokemon.favorite) R.drawable.ic_favorite_bold else R.drawable.ic_favorite
+        val idDrawable = if (detail.favorite) R.drawable.ic_favorite_bold else R.drawable.ic_favorite
         btnFavorite.setImageResource(idDrawable)
 
         val adapterType = TypeAdapter(detail.types)

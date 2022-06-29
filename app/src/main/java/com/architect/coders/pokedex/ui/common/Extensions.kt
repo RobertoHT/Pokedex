@@ -16,9 +16,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.App
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.data.database.CollectionL
-import com.architect.coders.pokedex.data.database.PokemonL
-import com.architect.coders.pokedex.model.GalleryItem
 import com.architect.coders.pokedex.data.network.PokemonItemR
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -32,8 +29,10 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import com.architect.coders.pokedex.data.Error
+import com.architect.coders.pokedex.domain.Pokemon
 
-private const val URL_SPRITE = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
+private const val URL_SPRITE =
+    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/%d.png"
 
 val Context.app: App
     get() = applicationContext as App
@@ -49,7 +48,7 @@ fun PokemonItemR.id() : Int {
     return split[split.size - 2].toInt()
 }
 
-fun PokemonL.imageUrl() : String =
+fun Pokemon.imageUrl() : String =
     String.format(URL_SPRITE, id)
 
 fun TextView.setCollectionTitle(type: PokeCollec) {
@@ -157,15 +156,7 @@ val RecyclerView.lastVisibleEvents: Flow<Int>
         awaitClose { removeOnScrollListener(listener) }
     }.conflate()
 
-fun List<CollectionL>.toGalleryItem(path: String): List<GalleryItem> =
-    groupBy { it.type }
-        .toList()
-        .map { GalleryItem(it.first.getTypeById(), it.second.toStringList(path)) }
-
-private fun List<CollectionL>.toStringList(path: String): MutableList<String> =
-    map { "$path/${it.photo}" }.toMutableList()
-
-private fun Int.getTypeById(): PokeCollec =
+fun Int.getTypeById(): PokeCollec =
     when(this) {
         1 -> PokeCollec.AMIIBO
         2 -> PokeCollec.PLUSH

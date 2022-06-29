@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.model
+package com.architect.coders.pokedex.domain
 
 import com.architect.coders.pokedex.ui.common.PokeCollec
 

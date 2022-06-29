@@ -2,8 +2,8 @@ package com.architect.coders.pokedex.ui.detail
 
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.data.Error
-import com.architect.coders.pokedex.data.database.PokemonDetailL
 import com.architect.coders.pokedex.data.toError
+import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
 import com.architect.coders.pokedex.usecases.FindPokemonUseCase
 import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase
@@ -34,7 +34,7 @@ class DetailViewModel(
         }
     }
 
-    private fun updateState(detail: PokemonDetailL?) {
+    private fun updateState(detail: Pokemon?) {
         if (detail != null) {
             _state.update { UIState(pokemon = detail, colorSwatch = colorSwatch, views = true) }
         } else {
@@ -45,14 +45,14 @@ class DetailViewModel(
     fun onFavoriteClicked() {
         viewModelScope.launch {
             _state.value.pokemon?.let { detail ->
-                val cause = switchPokemonFavoriteUseCase(detail.pokemon)
+                val cause = switchPokemonFavoriteUseCase(detail)
                 _state.update { it.copy(error = cause) }
             }
         }
     }
 
     data class UIState(
-        val pokemon: PokemonDetailL? = null,
+        val pokemon: Pokemon? = null,
         val colorSwatch: Int = 0,
         val loading: Boolean = false,
         val views: Boolean = false,
