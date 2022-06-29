@@ -15,13 +15,18 @@ import com.architect.coders.pokedex.ui.common.showSnackbar
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentGalleryBinding
 import com.architect.coders.pokedex.framework.FileRepository
+import com.architect.coders.pokedex.framework.datasource.PokemonRoomDataSource
+import com.architect.coders.pokedex.framework.datasource.PokemonServerDataSource
 import com.architect.coders.pokedex.usecases.*
 
 class GalleryFragment : Fragment(R.layout.fragment_gallery) {
 
     private val safeArgs: GalleryFragmentArgs by navArgs()
     private val viewModel: GalleryViewModel by viewModels {
-        val pokemonRepository = PokemonRepository(requireActivity().app)
+        val pokemonRepository = PokemonRepository(
+            PokemonRoomDataSource(requireActivity().app.db.pokemonDao()),
+            PokemonServerDataSource()
+        )
         val photoRepository: PhotoRepository = FileRepository(requireActivity().application)
         GalleryViewModelFactory(
             safeArgs.id,

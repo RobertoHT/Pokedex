@@ -10,6 +10,8 @@ import com.architect.coders.pokedex.ui.common.*
 import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentDetailBinding
 import com.architect.coders.pokedex.domain.Pokemon
+import com.architect.coders.pokedex.framework.datasource.PokemonRoomDataSource
+import com.architect.coders.pokedex.framework.datasource.PokemonServerDataSource
 import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
 import com.architect.coders.pokedex.usecases.FindPokemonUseCase
 import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase
@@ -18,7 +20,10 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
     private val safeArgs: DetailFragmentArgs by navArgs()
     private val viewModel: DetailViewModel by viewModels {
-        val repository = PokemonRepository(requireActivity().app)
+        val repository = PokemonRepository(
+            PokemonRoomDataSource(requireActivity().app.db.pokemonDao()),
+            PokemonServerDataSource()
+        )
         DetailViewModelFactory(
             CheckPokemonUseCase(repository),
             FindPokemonUseCase(repository),
