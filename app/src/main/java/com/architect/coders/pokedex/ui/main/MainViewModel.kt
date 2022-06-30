@@ -1,14 +1,18 @@
 package com.architect.coders.pokedex.ui.main
 
 import androidx.lifecycle.*
-import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.database.PokemonL
-import com.architect.coders.pokedex.model.Error
-import com.architect.coders.pokedex.model.toError
+import com.architect.coders.pokedex.domain.Error
+import com.architect.coders.pokedex.domain.Pokemon
+import com.architect.coders.pokedex.framework.toError
+import com.architect.coders.pokedex.usecases.GetPokemonUseCase
+import com.architect.coders.pokedex.usecases.RequestPokemonUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel() {
+class MainViewModel(
+    private val getPokemonUseCase: GetPokemonUseCase,
+    private val requestPokemonUseCase: RequestPokemonUseCase
+) : ViewModel() {
 
     private val _state = MutableStateFlow(UIState())
     val state: StateFlow<UIState> = _state.asStateFlow()
@@ -16,7 +20,7 @@ class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel
     init {
         viewModelScope.launch {
             refresh()
-            pokemoRepository.pokemonList
+            getPokemonUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) } }
                 .collect { pokemonList -> _state.update { UIState(pokemonList = pokemonList) } }
         }
@@ -28,20 +32,23 @@ class MainViewModel(private val pokemoRepository: PokemonRepository) : ViewModel
     }
 
     suspend fun notifyLastVisible(lastVisible: Int) {
-        val cause = pokemoRepository.checkRequierePokemonData(lastVisible)
+        val cause = requestPokemonUseCase(lastVisible)
         _state.update { it.copy(error = cause) }
     }
 
     data class UIState(
         val loading: Boolean = false,
-        val pokemonList: List<PokemonL>? = null,
+        val pokemonList: List<Pokemon>? = null,
         val error: Error? = null
     )
 }
 
 @Suppress("UNCHECKED_CAST")
-class MainViewModelFactory(private val pokemoRepository: PokemonRepository) : ViewModelProvider.Factory {
+class MainViewModelFactory(
+    private val getPokemonUseCase: GetPokemonUseCase,
+    private val requestPokemonUseCase: RequestPokemonUseCase
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel(pokemoRepository) as T
+        return MainViewModel(getPokemonUseCase, requestPokemonUseCase) as T
     }
 }

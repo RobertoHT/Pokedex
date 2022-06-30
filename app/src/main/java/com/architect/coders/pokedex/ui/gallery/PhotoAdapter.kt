@@ -5,8 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.databinding.PhotoItemBinding
-import com.architect.coders.pokedex.common.basicDiffUtil
-import com.architect.coders.pokedex.common.loadWithPath
+import com.architect.coders.pokedex.ui.common.basicDiffUtil
+import com.architect.coders.pokedex.ui.common.loadWithPath
 
 class PhotoAdapter(val collectionClickListener: (String) -> Unit) :
     ListAdapter<String, PhotoAdapter.ViewHolder>(basicDiffUtil { old, new -> old == new }) {

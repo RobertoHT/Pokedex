@@ -2,7 +2,7 @@ package com.architect.coders.pokedex
 
 import android.app.Application
 import androidx.room.Room
-import com.architect.coders.pokedex.database.PokemonDatabase
+import com.architect.coders.pokedex.framework.database.PokemonDatabase
 
 class App : Application() {
 

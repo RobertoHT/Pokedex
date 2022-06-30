@@ -1,15 +1,19 @@
 package com.architect.coders.pokedex.ui.detail
 
 import androidx.lifecycle.*
-import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.database.PokemonDetailL
-import com.architect.coders.pokedex.model.Error
-import com.architect.coders.pokedex.model.toError
+import com.architect.coders.pokedex.domain.Error
+import com.architect.coders.pokedex.domain.Pokemon
+import com.architect.coders.pokedex.framework.toError
+import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
+import com.architect.coders.pokedex.usecases.FindPokemonUseCase
+import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
-    private val pokemonRepository: PokemonRepository,
+    private val checkPokemonUseCase: CheckPokemonUseCase,
+    private val findPokemonUseCase: FindPokemonUseCase,
+    private val switchPokemonFavoriteUseCase: SwitchPokemonFavoriteUseCase,
     val pokemonID: Int,
     private val colorSwatch: Int
 ) : ViewModel() {
@@ -21,16 +25,16 @@ class DetailViewModel(
         viewModelScope.launch {
             _state.value = UIState(loading = true)
 
-            val cause = pokemonRepository.checkPokemonDetail(pokemonID)
+            val cause = checkPokemonUseCase(pokemonID)
             _state.update { it.copy(error = cause) }
 
-            pokemonRepository.getPokemonDetail(pokemonID)
+            findPokemonUseCase(pokemonID)
                 .catch { error -> _state.update { it.copy(error = error.toError()) } }
                 .collect { updateState(it) }
         }
     }
 
-    private fun updateState(detail: PokemonDetailL?) {
+    private fun updateState(detail: Pokemon?) {
         if (detail != null) {
             _state.update { UIState(pokemon = detail, colorSwatch = colorSwatch, views = true) }
         } else {
@@ -41,14 +45,14 @@ class DetailViewModel(
     fun onFavoriteClicked() {
         viewModelScope.launch {
             _state.value.pokemon?.let { detail ->
-                val cause = pokemonRepository.switchFavorite(detail.pokemon)
+                val cause = switchPokemonFavoriteUseCase(detail)
                 _state.update { it.copy(error = cause) }
             }
         }
     }
 
     data class UIState(
-        val pokemon: PokemonDetailL? = null,
+        val pokemon: Pokemon? = null,
         val colorSwatch: Int = 0,
         val loading: Boolean = false,
         val views: Boolean = false,
@@ -58,11 +62,19 @@ class DetailViewModel(
 
 @Suppress("UNCHECKED_CAST")
 class DetailViewModelFactory(
-    private val pokemoRepository: PokemonRepository,
+    private val checkPokemonUseCase: CheckPokemonUseCase,
+    private val findPokemonUseCase: FindPokemonUseCase,
+    private val switchPokemonFavoriteUseCase: SwitchPokemonFavoriteUseCase,
     private val pokemonID: Int,
     private val colorSwatch: Int
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetailViewModel(pokemoRepository ,pokemonID, colorSwatch) as T
+        return DetailViewModel(
+            checkPokemonUseCase,
+            findPokemonUseCase,
+            switchPokemonFavoriteUseCase,
+            pokemonID,
+            colorSwatch
+        ) as T
     }
 }

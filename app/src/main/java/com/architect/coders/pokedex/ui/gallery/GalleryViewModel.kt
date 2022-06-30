@@ -1,24 +1,27 @@
 package com.architect.coders.pokedex.ui.gallery
 
-import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.*
-import com.architect.coders.pokedex.common.PokeCollec
-import com.architect.coders.pokedex.common.toGalleryItem
-import com.architect.coders.pokedex.data.PokemonRepository
-import com.architect.coders.pokedex.database.CollectionL
-import com.architect.coders.pokedex.data.FileRepository
-import com.architect.coders.pokedex.model.Error
-import com.architect.coders.pokedex.model.GalleryItem
-import com.architect.coders.pokedex.model.toError
-import com.architect.coders.pokedex.util.getCollection
+import com.architect.coders.pokedex.domain.PokeCollec
+import com.architect.coders.pokedex.domain.Error
+import com.architect.coders.pokedex.domain.GalleryItem
+import com.architect.coders.pokedex.usecases.CreatePhotoUseCase
+import com.architect.coders.pokedex.usecases.DeletePhotoUseCase
+import com.architect.coders.pokedex.usecases.GetPathUseCase
+import com.architect.coders.pokedex.framework.toError
+import com.architect.coders.pokedex.ui.common.getCollection
+import com.architect.coders.pokedex.ui.common.lastPathSegment
+import com.architect.coders.pokedex.usecases.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class GalleryViewModel(
     private val pokemonID: Int,
-    private val fileRepository : FileRepository,
-    private val pokemonRepository: PokemonRepository
+    private val findCollectionsUseCase: FindCollectionsUseCase,
+    private val saveCollectionUseCase: SaveCollectionUseCase,
+    private val getPathUseCase: GetPathUseCase,
+    private val createPhotoUseCase: CreatePhotoUseCase,
+    private val deletePhotoUseCase: DeletePhotoUseCase
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(UIState())
@@ -26,10 +29,10 @@ class GalleryViewModel(
 
     init {
         viewModelScope.launch {
-            pokemonRepository.getCollectionByPokemon(pokemonID)
+            findCollectionsUseCase(pokemonID, getPathUseCase())
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) } }
                 .collect { collectionList ->
-                    _state.update { it.copy(colletionList = collectionList.toGalleryItem(fileRepository.path)) }
+                    _state.update { it.copy(colletionList = collectionList) }
             }
         }
     }
@@ -37,29 +40,28 @@ class GalleryViewModel(
     fun onCreatePictureFile(@IdRes fabID: Int) {
         val pokeType = getCollection(fabID)
         val nameFile = "Poke_${pokemonID}_${pokeType.id}_"
-        val imageData = fileRepository.createFile(nameFile)
-        imageData.fold({ cause -> _state.update { it.copy(error = cause) } }) { uri ->
-            _state.update { it.copy(nameImage = uri.lastPathSegment, type = pokeType, uriImage = uri) }
+        val imageData = createPhotoUseCase(nameFile)
+        imageData.fold({ cause -> _state.update { it.copy(error = cause) } }) { path ->
+            _state.update { it.copy(nameImage = path.lastPathSegment(), type = pokeType, pathImage = path) }
         }
     }
 
     fun onPictureReady(result: Boolean) {
         if (result) {
             viewModelScope.launch {
-                val cause = pokemonRepository.saveCollectionByPokemon(
-                    CollectionL(0, pokemonID, _state.value.type!!.id, _state.value.nameImage!!))
+                val cause = saveCollectionUseCase(pokemonID, _state.value.type!!.id, _state.value.nameImage!!)
                 _state.update { it.copy(error = cause) }
                 onTakePictureDone()
             }
         } else {
-            val cause = fileRepository.deleteImageFile(_state.value.nameImage!!)
+            val cause = deletePhotoUseCase(_state.value.nameImage!!)
             _state.update { it.copy(error = cause) }
             onTakePictureDone()
         }
     }
 
     fun onUriDone() {
-        _state.update { it.copy(uriImage = null) }
+        _state.update { it.copy(pathImage = null) }
     }
 
     private fun onTakePictureDone() {
@@ -70,7 +72,7 @@ class GalleryViewModel(
         val colletionList: List<GalleryItem>? = null,
         val nameImage: String? = null,
         val type: PokeCollec? = null,
-        val uriImage: Uri? = null,
+        val pathImage: String? = null,
         val error: Error? = null
     )
 }
@@ -78,10 +80,20 @@ class GalleryViewModel(
 @Suppress("UNCHECKED_CAST")
 class GalleryViewModelFactory(
     private val pokemonID: Int,
-    private val fileRepository : FileRepository,
-    private val pokemoRepository: PokemonRepository
+    private val findCollectionsUseCase: FindCollectionsUseCase,
+    private val saveCollectionUseCase: SaveCollectionUseCase,
+    private val getPathUseCase: GetPathUseCase,
+    private val createPhotoUseCase: CreatePhotoUseCase,
+    private val deletePhotoUseCase: DeletePhotoUseCase
     ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return GalleryViewModel(pokemonID, fileRepository, pokemoRepository) as T
+        return GalleryViewModel(
+            pokemonID,
+            findCollectionsUseCase,
+            saveCollectionUseCase,
+            getPathUseCase,
+            createPhotoUseCase,
+            deletePhotoUseCase
+        ) as T
     }
 }
