@@ -2,6 +2,7 @@ package com.architect.coders.pokedex.ui.common
 
 import androidx.annotation.IdRes
 import com.architect.coders.pokedex.R
+import com.architect.coders.pokedex.domain.PokeCollec
 
 fun getTypePokemonColor(typeName: String): Int {
     return when(typeName) {

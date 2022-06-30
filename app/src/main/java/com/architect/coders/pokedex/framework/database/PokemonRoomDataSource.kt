@@ -1,10 +1,12 @@
 package com.architect.coders.pokedex.framework.database
 
 import com.architect.coders.pokedex.data.datasource.PokemonLocalDataSource
+import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.GalleryItem
 import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.domain.Stat
 import com.architect.coders.pokedex.domain.Type
+import com.architect.coders.pokedex.framework.tryCall
 import com.architect.coders.pokedex.ui.common.getTypeById
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -15,27 +17,50 @@ class PokemonRoomDataSource(private val pokemonDao: PokemonDAO) : PokemonLocalDa
 
     override suspend fun size(): Int = pokemonDao.pokemonCount()
 
-    override suspend fun save(pokemonList: List<Pokemon>) {
+    override suspend fun save(pokemonList: List<Pokemon>): Error? = tryCall {
         pokemonDao.insertPokemon(pokemonList.fromDomainModel())
-    }
+    }.fold(
+        ifLeft = { it },
+        ifRight = { null }
+    )
 
     override suspend fun isEmpty(id: Int): Boolean = pokemonDao.isPokemonByIDEmpty(id) == 1
 
     override fun findById(id: Int): Flow<Pokemon> = pokemonDao.findPokemonByID(id).map { it.toDomainModel() }
 
-    override suspend fun update(pokemon: Pokemon) = pokemonDao.updatePokemon(pokemon.fromDomainModel())
+    override suspend fun update(pokemon: Pokemon): Error? = tryCall {
+        pokemonDao.updatePokemon(pokemon.fromDomainModel())
+    }.fold(
+        ifLeft = { it },
+        ifRight = { null }
+    )
 
-    override suspend fun saveTypes(id: Int, types: List<Type>) = pokemonDao.insertTypes(types.fromDomainTypeModel(id))
+    override suspend fun saveTypes(id: Int, types: List<Type>): Error? = tryCall {
+        pokemonDao.insertTypes(types.fromDomainTypeModel(id))
+    }.fold(
+        ifLeft = { it },
+        ifRight = { null }
+    )
 
-    override suspend fun saveStats(id: Int, stats: List<Stat>) = pokemonDao.insertStats(stats.fromDomainStatModel(id))
+    override suspend fun saveStats(id: Int, stats: List<Stat>): Error? = tryCall {
+        pokemonDao.insertStats(stats.fromDomainStatModel(id))
+    }.fold(
+        ifLeft = { it },
+        ifRight = { null }
+    )
 
     override fun getCollectionById(id: Int, path: String): Flow<List<GalleryItem>> =
         pokemonDao.getAllCollectionByPokemon(id).map { it.toDomainModel(path) }
 
-    override suspend fun saveCollection(id: Int, type: Int, image: String) = pokemonDao.insertCollection(
-        CollectionL(
-            0, id, type, image
+    override suspend fun saveCollection(id: Int, type: Int, image: String): Error? = tryCall {
+        pokemonDao.insertCollection(
+            CollectionL(
+                0, id, type, image
+            )
         )
+    }.fold(
+        ifLeft = { it },
+        ifRight = { null }
     )
 }
 

@@ -1,42 +1,37 @@
 package com.architect.coders.pokedex.framework
 
 import android.app.Application
-import android.net.Uri
 import android.os.Environment
-import androidx.core.content.FileProvider
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.architect.coders.pokedex.data.PhotoRepository
 import com.architect.coders.pokedex.domain.Error
-import com.architect.coders.pokedex.domain.toError
-import com.architect.coders.pokedex.domain.tryCall
 import java.io.File
 
 class FileRepository(private val application: Application) : PhotoRepository {
 
     override val path: String = getStorageDir()?.absolutePath!!
 
-    override fun createFile(nameFile: String): Either<Error, Uri> = try {
+    override fun createFile(nameFile: String): Either<Error, String> = try {
         val file = File.createTempFile(
             nameFile,
             ".jpg",
             getStorageDir()
         )
 
-        FileProvider.getUriForFile(
-            application,
-            "com.architect.coders.pokedex.fileprovider",
-            file
-        ).right()
+        file.absolutePath.right()
     } catch (e: Exception) {
         e.toError().left()
     }
 
-    override fun deleteImageFile(fileName: String): Error? = tryCall {
+    override fun deleteImageFile(fileName: String): Error? = try {
         val filePath = "$path/$fileName"
         val fileTemp = File(filePath)
         fileTemp.delete()
+        null
+    } catch (e: Exception) {
+        e.toError()
     }
 
     private fun getStorageDir() =

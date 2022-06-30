@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.architect.coders.pokedex.App
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.framework.network.PokemonItemR
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -29,6 +28,7 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import com.architect.coders.pokedex.domain.Error
+import com.architect.coders.pokedex.domain.PokeCollec
 import com.architect.coders.pokedex.domain.Pokemon
 
 private const val URL_SPRITE =
@@ -42,11 +42,6 @@ var View.visible: Boolean
     set(value) {
         visibility = if (value) View.VISIBLE else View.GONE
     }
-
-fun PokemonItemR.id() : Int {
-    val split = url.split("/")
-    return split[split.size - 2].toInt()
-}
 
 fun Pokemon.imageUrl() : String =
     String.format(URL_SPRITE, id)
@@ -149,7 +144,7 @@ val RecyclerView.lastVisibleEvents: Flow<Int>
 
         val listener = object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                offer(lm.findLastVisibleItemPosition())
+                trySend(lm.findLastVisibleItemPosition()).isSuccess
             }
         }
         addOnScrollListener(listener)
@@ -173,3 +168,6 @@ fun Context.errorToString(error: Error): String = when (error) {
 fun showSnackbar(view: View, message: String) {
     Snackbar.make(view, message, Snackbar.LENGTH_LONG).show()
 }
+
+fun String.lastPathSegment(): String =
+    this.split("/").last()

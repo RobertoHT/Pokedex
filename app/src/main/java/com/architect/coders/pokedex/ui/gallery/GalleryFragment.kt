@@ -7,14 +7,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
-import com.architect.coders.pokedex.data.PhotoRepository
 import com.architect.coders.pokedex.ui.common.app
 import com.architect.coders.pokedex.ui.common.errorToString
 import com.architect.coders.pokedex.ui.common.launchCollectAndDiff
 import com.architect.coders.pokedex.ui.common.showSnackbar
 import com.architect.coders.pokedex.data.PokemonRepository
+import com.architect.coders.pokedex.data.PhotoRepository
 import com.architect.coders.pokedex.databinding.FragmentGalleryBinding
-import com.architect.coders.pokedex.framework.FileRepository
+import com.architect.coders.pokedex.framework.*
 import com.architect.coders.pokedex.framework.database.PokemonRoomDataSource
 import com.architect.coders.pokedex.framework.network.PokemonServerDataSource
 import com.architect.coders.pokedex.usecases.*
@@ -34,7 +34,8 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery) {
             SaveCollectionUseCase(pokemonRepository),
             GetPathUseCase(photoRepository),
             CreatePhotoUseCase(photoRepository),
-            DeletePhotoUseCase(photoRepository))
+            DeletePhotoUseCase(photoRepository)
+        )
     }
 
     private lateinit var galleryState: GalleryState
@@ -60,8 +61,8 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery) {
             launchCollectAndDiff(this, {it.colletionList}) { list ->
                 list?.let { adapter.submitList(it) }
             }
-            launchCollectAndDiff(this, {it.uriImage}) { uri ->
-                uri?.let {
+            launchCollectAndDiff(this, {it.pathImage}) { path ->
+                path?.let {
                     galleryState.onTakePicture(it) { result ->
                         viewModel.onPictureReady(result)
                     }

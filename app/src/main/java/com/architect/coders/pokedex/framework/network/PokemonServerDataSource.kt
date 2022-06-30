@@ -1,18 +1,23 @@
 package com.architect.coders.pokedex.framework.network
 
+import arrow.core.Either
 import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource
+import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.domain.Stat
 import com.architect.coders.pokedex.domain.Type
-import com.architect.coders.pokedex.ui.common.id
+import com.architect.coders.pokedex.framework.id
+import com.architect.coders.pokedex.framework.tryCall
 
 class PokemonServerDataSource : PokemonRemoteDataSource {
 
-    override suspend fun getPokemonList(offset: Int): List<Pokemon> =
+    override suspend fun getPokemonList(offset: Int): Either<Error, List<Pokemon>> = tryCall {
         PokeClient.service.getPokemonList(offset).pokemonItems.toDomainModel()
+    }
 
-    override suspend fun getPokemonDetail(pokemonID: Int): Pokemon =
+    override suspend fun getPokemonDetail(pokemonID: Int): Either<Error, Pokemon> = tryCall {
         PokeClient.service.getPokemonDetail(pokemonID).toDomainModel()
+    }
 }
 
 private fun List<PokemonItemR>.toDomainModel(): List<Pokemon> =

@@ -1,13 +1,16 @@
 package com.architect.coders.pokedex.ui.gallery
 
-import android.net.Uri
 import androidx.annotation.IdRes
 import androidx.lifecycle.*
-import com.architect.coders.pokedex.ui.common.PokeCollec
+import com.architect.coders.pokedex.domain.PokeCollec
 import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.GalleryItem
-import com.architect.coders.pokedex.domain.toError
+import com.architect.coders.pokedex.usecases.CreatePhotoUseCase
+import com.architect.coders.pokedex.usecases.DeletePhotoUseCase
+import com.architect.coders.pokedex.usecases.GetPathUseCase
+import com.architect.coders.pokedex.framework.toError
 import com.architect.coders.pokedex.ui.common.getCollection
+import com.architect.coders.pokedex.ui.common.lastPathSegment
 import com.architect.coders.pokedex.usecases.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -38,8 +41,8 @@ class GalleryViewModel(
         val pokeType = getCollection(fabID)
         val nameFile = "Poke_${pokemonID}_${pokeType.id}_"
         val imageData = createPhotoUseCase(nameFile)
-        imageData.fold({ cause -> _state.update { it.copy(error = cause) } }) { uri ->
-            _state.update { it.copy(nameImage = uri.lastPathSegment, type = pokeType, uriImage = uri) }
+        imageData.fold({ cause -> _state.update { it.copy(error = cause) } }) { path ->
+            _state.update { it.copy(nameImage = path.lastPathSegment(), type = pokeType, pathImage = path) }
         }
     }
 
@@ -58,7 +61,7 @@ class GalleryViewModel(
     }
 
     fun onUriDone() {
-        _state.update { it.copy(uriImage = null) }
+        _state.update { it.copy(pathImage = null) }
     }
 
     private fun onTakePictureDone() {
@@ -69,7 +72,7 @@ class GalleryViewModel(
         val colletionList: List<GalleryItem>? = null,
         val nameImage: String? = null,
         val type: PokeCollec? = null,
-        val uriImage: Uri? = null,
+        val pathImage: String? = null,
         val error: Error? = null
     )
 }

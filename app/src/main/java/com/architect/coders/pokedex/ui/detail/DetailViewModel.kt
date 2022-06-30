@@ -3,7 +3,7 @@ package com.architect.coders.pokedex.ui.detail
 import androidx.lifecycle.*
 import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.Pokemon
-import com.architect.coders.pokedex.domain.toError
+import com.architect.coders.pokedex.framework.toError
 import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
 import com.architect.coders.pokedex.usecases.FindPokemonUseCase
 import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase
@@ -69,6 +69,12 @@ class DetailViewModelFactory(
     private val colorSwatch: Int
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetailViewModel(checkPokemonUseCase, findPokemonUseCase, switchPokemonFavoriteUseCase ,pokemonID, colorSwatch) as T
+        return DetailViewModel(
+            checkPokemonUseCase,
+            findPokemonUseCase,
+            switchPokemonFavoriteUseCase,
+            pokemonID,
+            colorSwatch
+        ) as T
     }
 }
