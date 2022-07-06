@@ -6,10 +6,11 @@ import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.GalleryItem
 import com.architect.coders.pokedex.domain.Pokemon
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
 private const val PAGE_THRESHOLD = 6
 
-class PokemonRepository(
+class PokemonRepository @Inject constructor(
     private val localDataSource: PokemonLocalDataSource,
     private val remoteDataSource: PokemonRemoteDataSource
 ) {

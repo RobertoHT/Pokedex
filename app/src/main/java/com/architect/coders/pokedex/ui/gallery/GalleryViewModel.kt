@@ -12,17 +12,22 @@ import com.architect.coders.pokedex.framework.toError
 import com.architect.coders.pokedex.ui.common.getCollection
 import com.architect.coders.pokedex.ui.common.lastPathSegment
 import com.architect.coders.pokedex.usecases.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class GalleryViewModel(
-    private val pokemonID: Int,
+@HiltViewModel
+class GalleryViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val findCollectionsUseCase: FindCollectionsUseCase,
     private val saveCollectionUseCase: SaveCollectionUseCase,
     private val getPathUseCase: GetPathUseCase,
     private val createPhotoUseCase: CreatePhotoUseCase,
     private val deletePhotoUseCase: DeletePhotoUseCase
 ) : ViewModel() {
+
+    private val pokemonID = GalleryFragmentArgs.fromSavedStateHandle(savedStateHandle).id
 
     private val _state = MutableStateFlow(UIState())
     val state: StateFlow<UIState> = _state.asStateFlow()
@@ -75,25 +80,4 @@ class GalleryViewModel(
         val pathImage: String? = null,
         val error: Error? = null
     )
-}
-
-@Suppress("UNCHECKED_CAST")
-class GalleryViewModelFactory(
-    private val pokemonID: Int,
-    private val findCollectionsUseCase: FindCollectionsUseCase,
-    private val saveCollectionUseCase: SaveCollectionUseCase,
-    private val getPathUseCase: GetPathUseCase,
-    private val createPhotoUseCase: CreatePhotoUseCase,
-    private val deletePhotoUseCase: DeletePhotoUseCase
-    ) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return GalleryViewModel(
-            pokemonID,
-            findCollectionsUseCase,
-            saveCollectionUseCase,
-            getPathUseCase,
-            createPhotoUseCase,
-            deletePhotoUseCase
-        ) as T
-    }
 }

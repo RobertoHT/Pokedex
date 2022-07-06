@@ -8,23 +8,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.ui.common.*
-import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentMainBinding
-import com.architect.coders.pokedex.framework.database.PokemonRoomDataSource
-import com.architect.coders.pokedex.framework.network.PokemonServerDataSource
-import com.architect.coders.pokedex.usecases.GetPokemonUseCase
-import com.architect.coders.pokedex.usecases.RequestPokemonUseCase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @OptIn(ExperimentalCoroutinesApi::class)
+@AndroidEntryPoint
 class MainFragment : Fragment(R.layout.fragment_main) {
 
-    private val viewModel: MainViewModel by viewModels {
-        val repository = PokemonRepository(
-            PokemonRoomDataSource(requireActivity().app.db.pokemonDao()),
-            PokemonServerDataSource()
-        )
-        MainViewModelFactory(GetPokemonUseCase(repository), RequestPokemonUseCase(repository)) }
+    private val viewModel: MainViewModel by viewModels()
+
     private val adapter = PokemonAdapter { pokemon, color -> mainState.onPokemonClicked(pokemon, color) }
 
     private lateinit var mainState: MainState

@@ -7,19 +7,16 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.ui.common.loadWithPathWithoutPlaceHolder
 import com.architect.coders.pokedex.databinding.FragmentCollectionBinding
-import kotlinx.coroutines.flow.collect
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class CollectionFragment : Fragment(R.layout.fragment_collection) {
 
-    private val safeArgs: CollectionFragmentArgs by navArgs()
-    private val viewModel: CollectionViewModel by viewModels {
-        CollectionViewModelFactory(safeArgs.imagePath)
-    }
+    private val viewModel: CollectionViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

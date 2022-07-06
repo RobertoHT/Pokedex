@@ -8,8 +8,9 @@ import arrow.core.right
 import com.architect.coders.pokedex.data.PhotoRepository
 import com.architect.coders.pokedex.domain.Error
 import java.io.File
+import javax.inject.Inject
 
-class FileRepository(private val application: Application) : PhotoRepository {
+class FileRepository @Inject constructor(private val application: Application) : PhotoRepository {
 
     override val path: String = getStorageDir()?.absolutePath!!
 
