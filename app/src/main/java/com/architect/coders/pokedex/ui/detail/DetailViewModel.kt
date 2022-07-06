@@ -7,16 +7,21 @@ import com.architect.coders.pokedex.framework.toError
 import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
 import com.architect.coders.pokedex.usecases.FindPokemonUseCase
 import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailViewModel(
+@HiltViewModel
+class DetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val checkPokemonUseCase: CheckPokemonUseCase,
     private val findPokemonUseCase: FindPokemonUseCase,
-    private val switchPokemonFavoriteUseCase: SwitchPokemonFavoriteUseCase,
-    val pokemonID: Int,
-    private val colorSwatch: Int
+    private val switchPokemonFavoriteUseCase: SwitchPokemonFavoriteUseCase
 ) : ViewModel() {
+
+    val pokemonID = DetailFragmentArgs.fromSavedStateHandle(savedStateHandle).id
+    private val colorSwatch = DetailFragmentArgs.fromSavedStateHandle(savedStateHandle).colorSwatch
 
     private val _state = MutableStateFlow(UIState())
     val state: StateFlow<UIState> = _state.asStateFlow()
@@ -58,23 +63,4 @@ class DetailViewModel(
         val views: Boolean = false,
         val error: Error? = null
     )
-}
-
-@Suppress("UNCHECKED_CAST")
-class DetailViewModelFactory(
-    private val checkPokemonUseCase: CheckPokemonUseCase,
-    private val findPokemonUseCase: FindPokemonUseCase,
-    private val switchPokemonFavoriteUseCase: SwitchPokemonFavoriteUseCase,
-    private val pokemonID: Int,
-    private val colorSwatch: Int
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return DetailViewModel(
-            checkPokemonUseCase,
-            findPokemonUseCase,
-            switchPokemonFavoriteUseCase,
-            pokemonID,
-            colorSwatch
-        ) as T
-    }
 }

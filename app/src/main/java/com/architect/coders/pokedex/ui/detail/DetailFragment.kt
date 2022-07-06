@@ -4,33 +4,16 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.ui.common.*
-import com.architect.coders.pokedex.data.PokemonRepository
 import com.architect.coders.pokedex.databinding.FragmentDetailBinding
 import com.architect.coders.pokedex.domain.Pokemon
-import com.architect.coders.pokedex.framework.database.PokemonRoomDataSource
-import com.architect.coders.pokedex.framework.network.PokemonServerDataSource
-import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
-import com.architect.coders.pokedex.usecases.FindPokemonUseCase
-import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailFragment : Fragment(R.layout.fragment_detail) {
 
-    private val safeArgs: DetailFragmentArgs by navArgs()
-    private val viewModel: DetailViewModel by viewModels {
-        val repository = PokemonRepository(
-            PokemonRoomDataSource(requireActivity().app.db.pokemonDao()),
-            PokemonServerDataSource()
-        )
-        DetailViewModelFactory(
-            CheckPokemonUseCase(repository),
-            FindPokemonUseCase(repository),
-            SwitchPokemonFavoriteUseCase(repository),
-            safeArgs.id,
-            safeArgs.colorSwatch)
-    }
+    private val viewModel: DetailViewModel by viewModels()
 
     private lateinit var detailState: DetailState
 

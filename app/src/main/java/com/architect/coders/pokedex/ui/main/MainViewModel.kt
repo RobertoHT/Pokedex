@@ -6,10 +6,13 @@ import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.framework.toError
 import com.architect.coders.pokedex.usecases.GetPokemonUseCase
 import com.architect.coders.pokedex.usecases.RequestPokemonUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val getPokemonUseCase: GetPokemonUseCase,
     private val requestPokemonUseCase: RequestPokemonUseCase
 ) : ViewModel() {
@@ -41,14 +44,4 @@ class MainViewModel(
         val pokemonList: List<Pokemon>? = null,
         val error: Error? = null
     )
-}
-
-@Suppress("UNCHECKED_CAST")
-class MainViewModelFactory(
-    private val getPokemonUseCase: GetPokemonUseCase,
-    private val requestPokemonUseCase: RequestPokemonUseCase
-) : ViewModelProvider.Factory {
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        return MainViewModel(getPokemonUseCase, requestPokemonUseCase) as T
-    }
 }

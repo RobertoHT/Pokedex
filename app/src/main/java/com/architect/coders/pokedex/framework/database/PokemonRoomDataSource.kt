@@ -10,8 +10,9 @@ import com.architect.coders.pokedex.framework.tryCall
 import com.architect.coders.pokedex.ui.common.getTypeById
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-class PokemonRoomDataSource(private val pokemonDao: PokemonDAO) : PokemonLocalDataSource {
+class PokemonRoomDataSource @Inject constructor(private val pokemonDao: PokemonDAO) : PokemonLocalDataSource {
 
     override val pokemonList: Flow<List<Pokemon>> = pokemonDao.getAllPokemon().map { it.toDomainModel() }
 

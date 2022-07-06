@@ -8,8 +8,9 @@ import com.architect.coders.pokedex.domain.Stat
 import com.architect.coders.pokedex.domain.Type
 import com.architect.coders.pokedex.framework.id
 import com.architect.coders.pokedex.framework.tryCall
+import javax.inject.Inject
 
-class PokemonServerDataSource : PokemonRemoteDataSource {
+class PokemonServerDataSource  @Inject constructor(): PokemonRemoteDataSource {
 
     override suspend fun getPokemonList(offset: Int): Either<Error, List<Pokemon>> = tryCall {
         PokeClient.service.getPokemonList(offset).pokemonItems.toDomainModel()
