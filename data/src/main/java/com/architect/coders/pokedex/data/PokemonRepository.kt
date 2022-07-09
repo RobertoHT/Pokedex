@@ -15,7 +15,7 @@ class PokemonRepository @Inject constructor(
     private val remoteDataSource: PokemonRemoteDataSource
 ) {
 
-    val pokemonList = localDataSource.pokemonList
+    val pokemonList get() = localDataSource.pokemonList
 
     suspend fun checkRequierePokemonData(lastVisible: Int): Error? {
         val size = localDataSource.size()
