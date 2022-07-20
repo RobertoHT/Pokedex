@@ -1,6 +1,7 @@
 package com.architect.coders.pokedex.usecases
 
 import com.architect.coders.pokedex.data.PokemonRepository
+import com.architect.coders.pokedex.testshared.samplePokemon
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
