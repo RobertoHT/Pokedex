@@ -115,4 +115,4 @@ private fun List<CollectionL>.toDomainModel(path: String): List<GalleryItem> =
         .map { GalleryItem(it.first.getTypeById(), it.second.toStringList(path)) }
 
 private fun List<CollectionL>.toStringList(path: String): MutableList<String> =
-    map { "$path/${it.photo}" }.toMutableList()
+    map { "$path${it.photo}" }.toMutableList()

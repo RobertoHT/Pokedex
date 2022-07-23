@@ -67,7 +67,9 @@ class GalleryViewModel @Inject constructor(
     }
 
     fun onUriDone() {
-        _state.update { it.copy(pathImage = null) }
+        viewModelScope.launch {
+            _state.update { it.copy(pathImage = null) }
+        }
     }
 
     private fun onTakePictureDone() {

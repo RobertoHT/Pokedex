@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class FileRepository @Inject constructor(private val application: Application) : PhotoRepository {
 
-    override val path: String = getStorageDir()?.absolutePath!!
+    override val path: String = getStorageDir()?.absolutePath!!+"/"
 
     override fun createFile(nameFile: String): Either<Error, String> = try {
         val file = File.createTempFile(
@@ -27,7 +27,7 @@ class FileRepository @Inject constructor(private val application: Application) :
     }
 
     override fun deleteImageFile(fileName: String): Error? = try {
-        val filePath = "$path/$fileName"
+        val filePath = "$path$fileName"
         val fileTemp = File(filePath)
         fileTemp.delete()
         null
