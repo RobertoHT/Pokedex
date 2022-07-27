@@ -1,9 +1,9 @@
 package com.architect.coders.pokedex.ui.main
 
 import app.cash.turbine.test
-import com.architect.coders.pokedex.buildDatabasePokemon
-import com.architect.coders.pokedex.buildPokemonRepositoryWith
-import com.architect.coders.pokedex.buildRemotePokemonItem
+import com.architect.coders.pokedex.util.buildDatabasePokemon
+import com.architect.coders.pokedex.util.buildPokemonRepositoryWith
+import com.architect.coders.pokedex.util.buildRemotePokemonItem
 import com.architect.coders.pokedex.framework.database.PokemonL
 import com.architect.coders.pokedex.framework.network.PokemonItemR
 import com.architect.coders.pokedex.testrules.CoroutinesTestRule

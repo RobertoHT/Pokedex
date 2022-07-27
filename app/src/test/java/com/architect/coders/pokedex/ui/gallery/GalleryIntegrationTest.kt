@@ -6,9 +6,9 @@ import com.architect.coders.pokedex.framework.database.CollectionL
 import com.architect.coders.pokedex.testrules.CoroutinesTestRule
 import com.architect.coders.pokedex.ui.gallery.GalleryViewModel.*
 import com.architect.coders.pokedex.usecases.*
-import com.architect.coders.pokedex.buildDatabseCollection
-import com.architect.coders.pokedex.buildPhotoRepository
-import com.architect.coders.pokedex.buildPokemonRepositoryWith
+import com.architect.coders.pokedex.util.buildDatabseCollection
+import com.architect.coders.pokedex.util.buildPhotoRepository
+import com.architect.coders.pokedex.util.buildPokemonRepositoryWith
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
