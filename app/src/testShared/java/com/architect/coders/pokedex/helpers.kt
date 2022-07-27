@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.util
+package com.architect.coders.pokedex
 
 import com.architect.coders.pokedex.data.PhotoRepository
 import com.architect.coders.pokedex.data.PokemonRepository

@@ -1,6 +1,7 @@
 package com.architect.coders.pokedex.ui.detail
 
 import app.cash.turbine.test
+import com.architect.coders.pokedex.*
 import com.architect.coders.pokedex.framework.database.PokemonL
 import com.architect.coders.pokedex.framework.database.StatL
 import com.architect.coders.pokedex.framework.database.TypeL
@@ -11,7 +12,6 @@ import com.architect.coders.pokedex.ui.detail.DetailViewModel.*
 import com.architect.coders.pokedex.usecases.CheckPokemonUseCase
 import com.architect.coders.pokedex.usecases.FindPokemonUseCase
 import com.architect.coders.pokedex.usecases.SwitchPokemonFavoriteUseCase
-import com.architect.coders.pokedex.util.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.*

@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.util
+package com.architect.coders.pokedex
 
 import arrow.core.Either
 import arrow.core.right
