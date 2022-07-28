@@ -1,8 +1,9 @@
 package com.architect.coders.pokedex.di
 
-import com.architect.coders.pokedex.framework.database.PokemonDAO
+import android.app.Application
+import androidx.room.Room
+import com.architect.coders.pokedex.framework.database.PokemonDatabase
 import com.architect.coders.pokedex.framework.network.PokeService
-import com.architect.coders.pokedex.util.FakePokemonDao
 import com.architect.coders.pokedex.util.FakePokemonRetrofit
 import com.architect.coders.pokedex.util.buildRemotePokemonItem
 import dagger.Module
@@ -20,7 +21,15 @@ object TestAppModule {
 
     @Provides
     @Singleton
-    fun provideDao(): PokemonDAO = FakePokemonDao()
+    fun provideDatabase(app: Application) =
+        Room.inMemoryDatabaseBuilder(
+            app,
+            PokemonDatabase::class.java
+        ).build()
+
+    @Provides
+    @Singleton
+    fun provideDao(db: PokemonDatabase) = db.pokemonDao()
 
     @Provides
     @Singleton
