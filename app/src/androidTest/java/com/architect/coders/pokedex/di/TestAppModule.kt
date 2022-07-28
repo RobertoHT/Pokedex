@@ -4,12 +4,12 @@ import android.app.Application
 import androidx.room.Room
 import com.architect.coders.pokedex.framework.database.PokemonDatabase
 import com.architect.coders.pokedex.framework.network.PokeService
-import com.architect.coders.pokedex.util.FakePokemonRetrofit
-import com.architect.coders.pokedex.util.buildRemotePokemonItem
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -33,5 +33,17 @@ object TestAppModule {
 
     @Provides
     @Singleton
-    fun provideRemoteClient(): PokeService = FakePokemonRetrofit(buildRemotePokemonItem(1, 2, 3, 4, 5))
+    @ApiUrl
+    fun provideApiUrl(): String = "http://localhost:8080"
+
+    @Provides
+    @Singleton
+    fun provideRemoteClient(@ApiUrl apiUrl: String): PokeService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(apiUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(PokeService::class.java)
+    }
 }
