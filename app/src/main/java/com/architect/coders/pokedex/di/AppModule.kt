@@ -38,9 +38,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRemoteClient(): PokeService {
+    @ApiUrl
+    fun provideApiUrl(): String = "https://pokeapi.co/api/v2/"
+
+    @Provides
+    @Singleton
+    fun provideRemoteClient(@ApiUrl apiUrl: String): PokeService {
         val retrofit = Retrofit.Builder()
-            .baseUrl("https://pokeapi.co/api/v2/")
+            .baseUrl(apiUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
