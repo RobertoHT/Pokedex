@@ -10,14 +10,14 @@ import com.architect.coders.pokedex.framework.id
 import com.architect.coders.pokedex.framework.tryCall
 import javax.inject.Inject
 
-class PokemonServerDataSource  @Inject constructor(): PokemonRemoteDataSource {
+class PokemonServerDataSource  @Inject constructor(private val remoteClient: PokeService): PokemonRemoteDataSource {
 
     override suspend fun getPokemonList(offset: Int): Either<Error, List<Pokemon>> = tryCall {
-        PokeClient.service.getPokemonList(offset).pokemonItems.toDomainModel()
+        remoteClient.getPokemonList(offset).pokemonItems.toDomainModel()
     }
 
     override suspend fun getPokemonDetail(pokemonID: Int): Either<Error, Pokemon> = tryCall {
-        PokeClient.service.getPokemonDetail(pokemonID).toDomainModel()
+        remoteClient.getPokemonDetail(pokemonID).toDomainModel()
     }
 }
 

@@ -22,21 +22,28 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            refresh()
             getPokemonUseCase()
                 .catch { cause -> _state.update { it.copy(error = cause.toError()) } }
-                .collect { pokemonList -> _state.update { UIState(pokemonList = pokemonList) } }
+                .collect { pokemonList ->
+                    if (pokemonList.isNotEmpty()) {
+                        _state.update { UIState(pokemonList = pokemonList) }
+                    }
+                }
         }
     }
 
-    private suspend fun refresh() {
-        _state.value = UIState(loading = true)
-        notifyLastVisible(0)
+    fun validateData() {
+        viewModelScope.launch {
+            if (state.value.pokemonList.isNullOrEmpty()) {
+                _state.update { it.copy(loading = true) }
+                notifyLastVisible(0)
+            }
+        }
     }
 
     suspend fun notifyLastVisible(lastVisible: Int) {
         val cause = requestPokemonUseCase(lastVisible)
-        _state.update { it.copy(error = cause) }
+        _state.update { it.copy(error = cause, loading = false) }
     }
 
     data class UIState(

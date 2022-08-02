@@ -2,6 +2,7 @@ package com.architect.coders.pokedex.ui.gallery
 
 import androidx.annotation.IdRes
 import androidx.lifecycle.*
+import com.architect.coders.pokedex.di.PokemonId
 import com.architect.coders.pokedex.domain.PokeCollec
 import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.GalleryItem
@@ -19,15 +20,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GalleryViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    @PokemonId private val pokemonID: Int,
     private val findCollectionsUseCase: FindCollectionsUseCase,
     private val saveCollectionUseCase: SaveCollectionUseCase,
     private val getPathUseCase: GetPathUseCase,
     private val createPhotoUseCase: CreatePhotoUseCase,
     private val deletePhotoUseCase: DeletePhotoUseCase
 ) : ViewModel() {
-
-    private val pokemonID = GalleryFragmentArgs.fromSavedStateHandle(savedStateHandle).id
 
     private val _state = MutableStateFlow(UIState())
     val state: StateFlow<UIState> = _state.asStateFlow()
@@ -43,30 +42,34 @@ class GalleryViewModel @Inject constructor(
     }
 
     fun onCreatePictureFile(@IdRes fabID: Int) {
-        val pokeType = getCollection(fabID)
-        val nameFile = "Poke_${pokemonID}_${pokeType.id}_"
-        val imageData = createPhotoUseCase(nameFile)
-        imageData.fold({ cause -> _state.update { it.copy(error = cause) } }) { path ->
-            _state.update { it.copy(nameImage = path.lastPathSegment(), type = pokeType, pathImage = path) }
+        viewModelScope.launch {
+            val pokeType = getCollection(fabID)
+            val nameFile = "Poke_${pokemonID}_${pokeType.id}_"
+            val imageData = createPhotoUseCase(nameFile)
+            imageData.fold({ cause -> _state.update { it.copy(error = cause) } }) { path ->
+                _state.update { it.copy(nameImage = path.lastPathSegment(), type = pokeType, pathImage = path) }
+            }
         }
     }
 
     fun onPictureReady(result: Boolean) {
-        if (result) {
-            viewModelScope.launch {
+        viewModelScope.launch {
+            if (result) {
                 val cause = saveCollectionUseCase(pokemonID, _state.value.type!!.id, _state.value.nameImage!!)
                 _state.update { it.copy(error = cause) }
                 onTakePictureDone()
+            } else {
+                val cause = deletePhotoUseCase(_state.value.nameImage!!)
+                _state.update { it.copy(error = cause) }
+                onTakePictureDone()
             }
-        } else {
-            val cause = deletePhotoUseCase(_state.value.nameImage!!)
-            _state.update { it.copy(error = cause) }
-            onTakePictureDone()
         }
     }
 
     fun onUriDone() {
-        _state.update { it.copy(pathImage = null) }
+        viewModelScope.launch {
+            _state.update { it.copy(pathImage = null) }
+        }
     }
 
     private fun onTakePictureDone() {

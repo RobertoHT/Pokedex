@@ -1,6 +1,8 @@
 package com.architect.coders.pokedex.ui.detail
 
 import androidx.lifecycle.*
+import com.architect.coders.pokedex.di.ColorSwatch
+import com.architect.coders.pokedex.di.PokemonId
 import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.framework.toError
@@ -14,14 +16,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    @PokemonId val pokemonID: Int,
+    @ColorSwatch private val colorSwatch: Int,
     private val checkPokemonUseCase: CheckPokemonUseCase,
     private val findPokemonUseCase: FindPokemonUseCase,
     private val switchPokemonFavoriteUseCase: SwitchPokemonFavoriteUseCase
 ) : ViewModel() {
-
-    val pokemonID = DetailFragmentArgs.fromSavedStateHandle(savedStateHandle).id
-    private val colorSwatch = DetailFragmentArgs.fromSavedStateHandle(savedStateHandle).colorSwatch
 
     private val _state = MutableStateFlow(UIState())
     val state: StateFlow<UIState> = _state.asStateFlow()

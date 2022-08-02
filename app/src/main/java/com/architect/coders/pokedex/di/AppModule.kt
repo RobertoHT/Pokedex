@@ -8,12 +8,15 @@ import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource
 import com.architect.coders.pokedex.framework.FileRepository
 import com.architect.coders.pokedex.framework.database.PokemonDatabase
 import com.architect.coders.pokedex.framework.database.PokemonRoomDataSource
+import com.architect.coders.pokedex.framework.network.PokeService
 import com.architect.coders.pokedex.framework.network.PokemonServerDataSource
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -32,6 +35,22 @@ object AppModule {
     @Provides
     @Singleton
     fun provideDao(db: PokemonDatabase) = db.pokemonDao()
+
+    @Provides
+    @Singleton
+    @ApiUrl
+    fun provideApiUrl(): String = "https://pokeapi.co/api/v2/"
+
+    @Provides
+    @Singleton
+    fun provideRemoteClient(@ApiUrl apiUrl: String): PokeService {
+        val retrofit = Retrofit.Builder()
+            .baseUrl(apiUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        return retrofit.create(PokeService::class.java)
+    }
 }
 
 @Module

@@ -29,7 +29,7 @@ class GalleryFragment : Fragment(R.layout.fragment_gallery) {
 
         val binding = FragmentGalleryBinding.bind(view).apply {
             adapter = GalleryAdapter { image -> galleryState.onImageClicked(image) }
-            amiiboRecycler.adapter = adapter
+            collectionRecycler.adapter = adapter
 
             expandableFab.portraitConfiguration.fabOptions.forEach {
                     fab -> fab.setOnClickListener { viewModel.onCreatePictureFile(it.id) }

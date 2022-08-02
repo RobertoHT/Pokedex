@@ -33,6 +33,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             recycler.adapter = adapter
         }
 
+        viewModel.validateData()
+
         with(viewModel.state) {
             launchCollectAndDiff(this, {it.loading}) { binding.progress.visible = it }
             launchCollectAndDiff(this, {it.pokemonList}) { adapter.submitList(it) }
