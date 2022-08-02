@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -38,9 +39,15 @@ object TestAppModule {
 
     @Provides
     @Singleton
-    fun provideRemoteClient(@ApiUrl apiUrl: String): PokeService {
+    fun provideOkHttpClient(): OkHttpClient =
+        OkHttpClient.Builder().build()
+
+    @Provides
+    @Singleton
+    fun provideRemoteClient(@ApiUrl apiUrl: String, okHttpClient: OkHttpClient): PokeService {
         val retrofit = Retrofit.Builder()
             .baseUrl(apiUrl)
+            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 

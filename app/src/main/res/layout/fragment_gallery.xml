@@ -9,7 +9,7 @@
     android:background="@color/teal_700">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/amiiboRecycler"
+        android:id="@+id/collectionRecycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
@@ -23,6 +23,7 @@
         android:layout_height="match_parent">
 
         <com.nambimobile.widgets.efab.ExpandableFab
+            android:id="@+id/fabExpandable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:efab_icon="@drawable/ic_add"

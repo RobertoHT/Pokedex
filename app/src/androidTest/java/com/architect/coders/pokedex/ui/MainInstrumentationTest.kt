@@ -1,6 +1,13 @@
 package com.architect.coders.pokedex.ui
 
+import androidx.recyclerview.widget.RecyclerView
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import com.architect.coders.pokedex.R
 import com.architect.coders.pokedex.data.MockWebServerRule
 import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource
 import com.architect.coders.pokedex.framework.database.PokemonDAO
@@ -13,7 +20,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.lang.Exception
 import javax.inject.Inject
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -80,5 +86,18 @@ class MainInstrumentationTest {
             assertEquals(7, it.height)
             assertEquals(69, it.weight)
         }
+    }
+
+    @Test
+    fun click_a_pokemon_navigates_to_detail() {
+        onView(withId(R.id.recycler))
+            .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        onView(withId(R.id.nameDetail))
+            .check(matches(withText("bulbasaur")))
+        onView(withId(R.id.weightDetail))
+            .check(matches(withText("69 kg")))
+        onView(withId(R.id.heightDetail))
+            .check(matches(withText("7 m")))
     }
 }
