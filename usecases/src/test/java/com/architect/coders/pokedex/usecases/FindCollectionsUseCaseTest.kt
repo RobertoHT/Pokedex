@@ -1,6 +1,6 @@
 package com.architect.coders.pokedex.usecases
 
-import com.architect.coders.pokedex.data.PokemonRepository
+import com.architect.coders.pokedex.data.repository.PokemonRepository
 import com.architect.coders.pokedex.testshared.sampleGallery
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking

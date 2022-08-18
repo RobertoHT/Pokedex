@@ -1,8 +1,8 @@
-package com.architect.coders.pokedex.framework.network
+package com.architect.coders.pokedex.framework.network.model
 
 import com.google.gson.annotations.SerializedName
 
-data class StatX(
+data class TypeX(
     @SerializedName("name")
     val name: String,
     @SerializedName("url")

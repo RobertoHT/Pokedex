@@ -7,6 +7,10 @@ import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.domain.Stat
 import com.architect.coders.pokedex.domain.Type
 import com.architect.coders.pokedex.framework.id
+import com.architect.coders.pokedex.framework.network.model.PokemonDetailR
+import com.architect.coders.pokedex.framework.network.model.PokemonItemR
+import com.architect.coders.pokedex.framework.network.model.StatR
+import com.architect.coders.pokedex.framework.network.model.TypeR
 import com.architect.coders.pokedex.framework.tryCall
 import javax.inject.Inject
 

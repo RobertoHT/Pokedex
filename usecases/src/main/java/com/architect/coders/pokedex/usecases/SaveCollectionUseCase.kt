@@ -1,6 +1,6 @@
 package com.architect.coders.pokedex.usecases
 
-import com.architect.coders.pokedex.data.PokemonRepository
+import com.architect.coders.pokedex.data.repository.PokemonRepository
 import com.architect.coders.pokedex.domain.Error
 import javax.inject.Inject
 

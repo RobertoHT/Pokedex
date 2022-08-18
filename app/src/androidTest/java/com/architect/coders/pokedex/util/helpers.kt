@@ -1,9 +1,14 @@
 package com.architect.coders.pokedex.util
 
 import com.architect.coders.pokedex.data.PhotoRepository
-import com.architect.coders.pokedex.data.PokemonRepository
+import com.architect.coders.pokedex.data.repository.PokemonRepository
 import com.architect.coders.pokedex.framework.database.*
+import com.architect.coders.pokedex.framework.database.model.CollectionL
+import com.architect.coders.pokedex.framework.database.model.PokemonL
+import com.architect.coders.pokedex.framework.database.model.StatL
+import com.architect.coders.pokedex.framework.database.model.TypeL
 import com.architect.coders.pokedex.framework.network.*
+import com.architect.coders.pokedex.framework.network.model.*
 
 fun buildPokemonRepositoryWith(
     localData: List<PokemonL> = emptyList(),

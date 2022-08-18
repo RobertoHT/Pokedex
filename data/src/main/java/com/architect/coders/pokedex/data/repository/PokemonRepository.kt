@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.data
+package com.architect.coders.pokedex.data.repository
 
 import com.architect.coders.pokedex.data.datasource.PokemonLocalDataSource
 import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource

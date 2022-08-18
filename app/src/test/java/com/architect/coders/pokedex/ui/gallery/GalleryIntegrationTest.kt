@@ -2,7 +2,7 @@ package com.architect.coders.pokedex.ui.gallery
 
 import app.cash.turbine.test
 import com.architect.coders.pokedex.domain.PokeCollec.*
-import com.architect.coders.pokedex.framework.database.CollectionL
+import com.architect.coders.pokedex.framework.database.model.CollectionL
 import com.architect.coders.pokedex.testrules.CoroutinesTestRule
 import com.architect.coders.pokedex.ui.gallery.GalleryViewModel.*
 import com.architect.coders.pokedex.usecases.*

@@ -5,7 +5,9 @@ import arrow.core.right
 import com.architect.coders.pokedex.data.PhotoRepository
 import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.framework.database.*
+import com.architect.coders.pokedex.framework.database.model.*
 import com.architect.coders.pokedex.framework.network.*
+import com.architect.coders.pokedex.framework.network.model.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

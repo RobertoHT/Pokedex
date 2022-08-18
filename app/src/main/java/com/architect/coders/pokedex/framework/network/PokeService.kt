@@ -1,5 +1,7 @@
 package com.architect.coders.pokedex.framework.network
 
+import com.architect.coders.pokedex.framework.network.model.PokemonDetailR
+import com.architect.coders.pokedex.framework.network.model.PokemonListResult
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
