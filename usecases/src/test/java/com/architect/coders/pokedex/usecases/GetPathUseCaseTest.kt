@@ -1,6 +1,6 @@
 package com.architect.coders.pokedex.usecases
 
-import com.architect.coders.pokedex.data.PhotoRepository
+import com.architect.coders.pokedex.data.repository.PokemonRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
@@ -13,13 +13,13 @@ import org.mockito.kotlin.whenever
 class GetPathUseCaseTest {
 
     @Mock
-    lateinit var photoRepository: PhotoRepository
+    lateinit var pokemonRepository: PokemonRepository
 
     @Test
-    fun `Invoke calls photo repository`(): Unit = runBlocking {
+    fun `Invoke calls photo path`(): Unit = runBlocking {
         val path = "pathPhoto"
-        whenever(photoRepository.path).thenReturn(path)
-        val getPathUseCase = GetPathUseCase(photoRepository)
+        whenever(pokemonRepository.getPhotoPath()).thenReturn(path)
+        val getPathUseCase = GetPathUseCase(pokemonRepository)
 
         val result = getPathUseCase()
 

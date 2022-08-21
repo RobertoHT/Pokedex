@@ -1,7 +1,7 @@
 package com.architect.coders.pokedex.usecases
 
 import arrow.core.right
-import com.architect.coders.pokedex.data.PhotoRepository
+import com.architect.coders.pokedex.data.repository.PokemonRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
@@ -14,14 +14,14 @@ import org.mockito.kotlin.whenever
 class CreatePhotoUseCaseTest {
 
     @Mock
-    lateinit var photoRepository: PhotoRepository
+    lateinit var pokemonRepository: PokemonRepository
 
     @Test
-    fun `Invoke calls photo repository`(): Unit = runBlocking {
+    fun `Invoke calls photo create`(): Unit = runBlocking {
         val photo = "namePhoto"
         val image = "pathImage"
-        whenever(photoRepository.createFile(photo)).thenReturn(image.right())
-        val createPhotoUseCase = CreatePhotoUseCase(photoRepository)
+        whenever(pokemonRepository.createPhoto(photo)).thenReturn(image.right())
+        val createPhotoUseCase = CreatePhotoUseCase(pokemonRepository)
 
         val result = createPhotoUseCase(photo)
 

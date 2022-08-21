@@ -1,6 +1,6 @@
 package com.architect.coders.pokedex.util
 
-import com.architect.coders.pokedex.data.PhotoRepository
+import com.architect.coders.pokedex.data.datasource.PokemonPhotoDataSource
 import com.architect.coders.pokedex.data.repository.PokemonRepository
 import com.architect.coders.pokedex.framework.database.*
 import com.architect.coders.pokedex.framework.database.model.CollectionL
@@ -21,11 +21,12 @@ fun buildPokemonRepositoryWith(
 ): PokemonRepository {
     val localDataSource = PokemonRoomDataSource(FakePokemonDao(localData, localType, localStat, localCollection))
     val remoteDataSource = PokemonServerDataSource(FakePokemonRetrofit(remoteData, remoteType, remoteStat))
-    return PokemonRepository(localDataSource, remoteDataSource)
+    val photoDataSource = FakePokemonPhotoDataSource()
+    return PokemonRepository(localDataSource, remoteDataSource, photoDataSource)
 }
 
-fun buildPhotoRepository(): PhotoRepository {
-    return FakePhotoRepository()
+fun buildPhotoRepository(): PokemonPhotoDataSource {
+    return FakePokemonPhotoDataSource()
 }
 
 fun buildDatabasePokemon(empty: Boolean, vararg id: Int) = id.map {

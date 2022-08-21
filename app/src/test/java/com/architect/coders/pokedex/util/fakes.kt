@@ -2,7 +2,7 @@ package com.architect.coders.pokedex.util
 
 import arrow.core.Either
 import arrow.core.right
-import com.architect.coders.pokedex.data.PhotoRepository
+import com.architect.coders.pokedex.data.datasource.PokemonPhotoDataSource
 import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.framework.database.*
 import com.architect.coders.pokedex.framework.database.model.*
@@ -105,7 +105,7 @@ class FakePokemonRetrofit(
 }
 
 
-class FakePhotoRepository : PhotoRepository {
+class FakePokemonPhotoDataSource : PokemonPhotoDataSource {
 
     private lateinit var file: String
 
