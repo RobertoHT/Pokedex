@@ -1,6 +1,7 @@
 package com.architect.coders.pokedex.framework.database
 
 import androidx.room.*
+import com.architect.coders.pokedex.framework.database.model.*
 import kotlinx.coroutines.flow.Flow
 
 @Dao

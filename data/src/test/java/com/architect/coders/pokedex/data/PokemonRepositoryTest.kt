@@ -2,7 +2,9 @@ package com.architect.coders.pokedex.data
 
 import arrow.core.right
 import com.architect.coders.pokedex.data.datasource.PokemonLocalDataSource
+import com.architect.coders.pokedex.data.datasource.PokemonPhotoDataSource
 import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource
+import com.architect.coders.pokedex.data.repository.PokemonRepository
 import com.architect.coders.pokedex.domain.*
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
@@ -23,6 +25,9 @@ class PokemonRepositoryTest {
     @Mock
     lateinit var remoteDataSource: PokemonRemoteDataSource
 
+    @Mock
+    lateinit var photoDataSource: PokemonPhotoDataSource
+
     private lateinit var pokemonRepository: PokemonRepository
 
     private val localPokemon = flowOf(listOf(samplePokemon.copy(1)))
@@ -30,7 +35,7 @@ class PokemonRepositoryTest {
     @Before
     fun setup() {
         whenever(localDataSource.pokemonList).thenReturn(localPokemon)
-        pokemonRepository = PokemonRepository(localDataSource, remoteDataSource)
+        pokemonRepository = PokemonRepository(localDataSource, remoteDataSource, photoDataSource)
     }
 
     @Test
@@ -132,6 +137,32 @@ class PokemonRepositoryTest {
         pokemonRepository.saveCollectionByPokemon(id, type, image)
 
         verify(localDataSource).saveCollection(id, type, image)
+    }
+
+    @Test
+    fun `Get path for show photo`(): Unit = runBlocking {
+        val path = "path"
+        whenever(photoDataSource.path).thenReturn(path)
+
+        val result = pokemonRepository.getPhotoPath()
+
+        assertEquals(path, result)
+    }
+
+    @Test
+    fun `Create a photo file`(): Unit = runBlocking {
+        val name = "photoName"
+        pokemonRepository.createPhoto(name)
+
+        verify(photoDataSource).createFile(name)
+    }
+
+    @Test
+    fun `Delete a photo file`(): Unit = runBlocking {
+        val name = "photoName"
+        pokemonRepository.deletePhoto(name)
+
+        verify(photoDataSource).deleteImageFile(name)
     }
 }
 

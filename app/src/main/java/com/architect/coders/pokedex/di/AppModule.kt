@@ -2,10 +2,10 @@ package com.architect.coders.pokedex.di
 
 import android.app.Application
 import androidx.room.Room
-import com.architect.coders.pokedex.data.PhotoRepository
+import com.architect.coders.pokedex.data.datasource.PokemonPhotoDataSource
 import com.architect.coders.pokedex.data.datasource.PokemonLocalDataSource
 import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource
-import com.architect.coders.pokedex.framework.FileRepository
+import com.architect.coders.pokedex.framework.file.PokemonFileDataSource
 import com.architect.coders.pokedex.framework.database.PokemonDatabase
 import com.architect.coders.pokedex.framework.database.PokemonRoomDataSource
 import com.architect.coders.pokedex.framework.network.PokeService
@@ -58,7 +58,7 @@ object AppModule {
 abstract class AppDataModule {
 
     @Binds
-    abstract fun bindPhotoRepository(photoRepository: FileRepository): PhotoRepository
+    abstract fun bindPhotoRepository(photoRepository: PokemonFileDataSource): PokemonPhotoDataSource
 
     @Binds
     abstract fun bindLocalDataSource(localDataSource: PokemonRoomDataSource): PokemonLocalDataSource

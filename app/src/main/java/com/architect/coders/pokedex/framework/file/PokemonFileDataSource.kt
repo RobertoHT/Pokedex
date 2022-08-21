@@ -1,16 +1,17 @@
-package com.architect.coders.pokedex.framework
+package com.architect.coders.pokedex.framework.file
 
 import android.app.Application
 import android.os.Environment
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import com.architect.coders.pokedex.data.PhotoRepository
+import com.architect.coders.pokedex.data.datasource.PokemonPhotoDataSource
 import com.architect.coders.pokedex.domain.Error
+import com.architect.coders.pokedex.framework.toError
 import java.io.File
 import javax.inject.Inject
 
-class FileRepository @Inject constructor(private val application: Application) : PhotoRepository {
+class PokemonFileDataSource @Inject constructor(private val application: Application) : PokemonPhotoDataSource {
 
     override val path: String = getStorageDir()?.absolutePath!!+"/"
 

@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.framework.database
+package com.architect.coders.pokedex.framework.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

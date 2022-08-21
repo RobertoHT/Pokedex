@@ -1,4 +1,4 @@
-package com.architect.coders.pokedex.framework.network
+package com.architect.coders.pokedex.framework.network.model
 
 import com.google.gson.annotations.SerializedName
 

@@ -1,6 +1,6 @@
 package com.architect.coders.pokedex.usecases
 
-import com.architect.coders.pokedex.data.PhotoRepository
+import com.architect.coders.pokedex.data.repository.PokemonRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -12,15 +12,15 @@ import org.mockito.kotlin.verify
 class DeletePhotoUseCaseTest {
 
     @Mock
-    lateinit var photoRepository: PhotoRepository
+    lateinit var pokemonRepository: PokemonRepository
 
     @Test
-    fun `Invoke calls photo repository`(): Unit = runBlocking {
+    fun `Invoke calls photo delete`(): Unit = runBlocking {
         val photo = "namePhoto"
-        val deletePhotoUseCase = DeletePhotoUseCase(photoRepository)
+        val deletePhotoUseCase = DeletePhotoUseCase(pokemonRepository)
 
         deletePhotoUseCase(photo)
 
-        verify(photoRepository).deleteImageFile(photo)
+        verify(pokemonRepository).deletePhoto(photo)
     }
 }

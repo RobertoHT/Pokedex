@@ -6,6 +6,7 @@ import com.architect.coders.pokedex.domain.GalleryItem
 import com.architect.coders.pokedex.domain.Pokemon
 import com.architect.coders.pokedex.domain.Stat
 import com.architect.coders.pokedex.domain.Type
+import com.architect.coders.pokedex.framework.database.model.*
 import com.architect.coders.pokedex.framework.tryCall
 import com.architect.coders.pokedex.ui.common.getTypeById
 import kotlinx.coroutines.flow.Flow

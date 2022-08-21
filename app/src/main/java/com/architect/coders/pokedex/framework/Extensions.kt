@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import com.architect.coders.pokedex.domain.Error
-import com.architect.coders.pokedex.framework.network.PokemonItemR
+import com.architect.coders.pokedex.framework.network.model.PokemonItemR
 import retrofit2.HttpException
 import java.io.FileNotFoundException
 import java.io.IOException

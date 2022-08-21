@@ -1,6 +1,8 @@
-package com.architect.coders.pokedex.data
+package com.architect.coders.pokedex.data.repository
 
+import arrow.core.Either
 import com.architect.coders.pokedex.data.datasource.PokemonLocalDataSource
+import com.architect.coders.pokedex.data.datasource.PokemonPhotoDataSource
 import com.architect.coders.pokedex.data.datasource.PokemonRemoteDataSource
 import com.architect.coders.pokedex.domain.Error
 import com.architect.coders.pokedex.domain.GalleryItem
@@ -12,7 +14,8 @@ private const val PAGE_THRESHOLD = 6
 
 class PokemonRepository @Inject constructor(
     private val localDataSource: PokemonLocalDataSource,
-    private val remoteDataSource: PokemonRemoteDataSource
+    private val remoteDataSource: PokemonRemoteDataSource,
+    private val photoDataSource: PokemonPhotoDataSource
 ) {
 
     val pokemonList get() = localDataSource.pokemonList
@@ -55,4 +58,12 @@ class PokemonRepository @Inject constructor(
     suspend fun saveCollectionByPokemon(id: Int, type: Int, image: String): Error? {
         return localDataSource.saveCollection(id, type, image)
     }
+
+    fun getPhotoPath(): String = photoDataSource.path
+
+    fun createPhoto(photoName: String): Either<Error, String> =
+        photoDataSource.createFile(photoName)
+
+    fun deletePhoto(photoName: String): Error? =
+        photoDataSource.deleteImageFile(photoName)
 }

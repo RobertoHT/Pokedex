@@ -2,12 +2,11 @@ package com.architect.coders.pokedex.ui.gallery
 
 import app.cash.turbine.test
 import com.architect.coders.pokedex.domain.PokeCollec.*
-import com.architect.coders.pokedex.framework.database.CollectionL
+import com.architect.coders.pokedex.framework.database.model.CollectionL
 import com.architect.coders.pokedex.testrules.CoroutinesTestRule
 import com.architect.coders.pokedex.ui.gallery.GalleryViewModel.*
 import com.architect.coders.pokedex.usecases.*
 import com.architect.coders.pokedex.util.buildDatabseCollection
-import com.architect.coders.pokedex.util.buildPhotoRepository
 import com.architect.coders.pokedex.util.buildPokemonRepositoryWith
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -113,12 +112,11 @@ class GalleryIntegrationTest {
         localCollection: List<CollectionL> = arrayListOf()
     ): GalleryViewModel {
         val pokemonRepository = buildPokemonRepositoryWith(localCollection = localCollection)
-        val photoRepository = buildPhotoRepository()
         val findCollectionsUseCase = FindCollectionsUseCase(pokemonRepository)
         val saveCollectionUseCase = SaveCollectionUseCase(pokemonRepository)
-        val getPathUseCase = GetPathUseCase(photoRepository)
-        val createPhotoUseCase = CreatePhotoUseCase(photoRepository)
-        val deletePhotoUseCase = DeletePhotoUseCase(photoRepository)
+        val getPathUseCase = GetPathUseCase(pokemonRepository)
+        val createPhotoUseCase = CreatePhotoUseCase(pokemonRepository)
+        val deletePhotoUseCase = DeletePhotoUseCase(pokemonRepository)
         return GalleryViewModel(
             id,
             findCollectionsUseCase,
